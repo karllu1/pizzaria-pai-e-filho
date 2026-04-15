@@ -509,6 +509,40 @@
       color: white;
     }
 
+    /* ADICIONAIS */
+    .adicionais-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .adicional-btn {
+      background: white;
+      border: 2px solid #ddd;
+      color: var(--texto);
+      border-radius: 50px;
+      padding: 7px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .adicional-btn .adicional-preco {
+      font-size: 0.72rem;
+      color: #aaa;
+      font-weight: 600;
+    }
+    .adicional-btn:hover { border-color: var(--laranja); }
+    .adicional-btn.selecionado {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
+    }
+    .adicional-btn.selecionado .adicional-preco { color: rgba(255,255,255,0.8); }
+
     /* SELEÇÃO DE BORDA */
     .borda-grid {
       display: flex;
@@ -699,7 +733,7 @@
     }
     .carrinho-vazio .big { font-size: 3rem; display: block; margin-bottom: 10px; }
 
-    /* ===== NOTIFICAÇÃO FLUTUANTE  ===== */
+    /* ===== NOTIFICAÇÃO FLUTUANTE (TOAST) ===== */
     #toast {
       position: fixed;
       bottom: 24px;
@@ -718,7 +752,7 @@
     }
     #toast.show { transform: translateX(-50%) translateY(0); } /* sobe para aparecer */
 
-    /* ===== RODAPÉ E TALVEZ RODEMÃO ===== */
+    /* ===== RODAPÉ ===== */
     footer {
       background: var(--escuro);
       color: rgba(255,255,255,0.6);

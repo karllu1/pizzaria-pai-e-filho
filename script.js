@@ -44,6 +44,23 @@ const itens = [
   { nome:"Pepsi 1L",               preco:8,  cat:"bebida" },
 ];
 
+// Lista de adicionais disponíveis (preco: 0 = grátis / verduras)
+const ADICIONAIS_LISTA = [
+  { nome: 'Calabresa',   preco: 5 },
+  { nome: 'Frango',      preco: 5 },
+  { nome: 'Carne de sol',preco: 5 },
+  { nome: 'Bacon',       preco: 5 },
+  { nome: 'Presunto',    preco: 5 },
+  { nome: 'Requeijão',   preco: 5 },
+  { nome: 'Cheddar',     preco: 5 },
+  { nome: 'Ovos',        preco: 5 },
+  { nome: 'Milho',       preco: 5 },
+  { nome: 'Uva passa',   preco: 5 },
+  { nome: 'Tomate',      preco: 0 },
+  { nome: 'Pimentão',    preco: 0 },
+  { nome: 'Cebola',      preco: 0 },
+];
+
 // Preços adicionais de borda por tamanho (P = Pequena, G = Grande)
 const BORDA_PRECOS = {
   'Sem borda':           { P: 0,  G: 0  },
@@ -63,6 +80,7 @@ let modalTamanho = 'P';
 let modalSabores = [];
 let modalBordaNome = 'Sem borda';
 let modalCatAtual = 'pizza';
+let modalAdicionais = [];       // adicionais selecionados (máx. 1x cada)
 
 // ===================== NAVEGAÇÃO =====================
 function irParaCategorias(){
@@ -146,6 +164,7 @@ function abrirModal(cat, nomeInicial, precoP, precoG, tam){
   modalSabores = [{ nome: nomeInicial, p: precoP, g: precoG }];
   modalBordaNome = 'Sem borda';
   modalCatAtual = cat;
+  modalAdicionais = []; // reseta adicionais
 
   // destaca o tamanho selecionado
   document.querySelectorAll('.tam-btn').forEach(b => b.classList.remove('ativo'));
@@ -153,6 +172,7 @@ function abrirModal(cat, nomeInicial, precoP, precoG, tam){
 
   atualizarLabelsTamanho();
   renderizarSaboresModal();
+  renderizarAdicionaisModal();
 
   // reseta seleção de borda para "Sem borda"
   document.querySelectorAll('.borda-btn').forEach(b => b.classList.remove('ativo'));
@@ -171,13 +191,22 @@ function fecharModal(){
 }
 
 function atualizarLabelsTamanho(){
-  // exibe o preço total (base + borda) em cada botão de tamanho
-  const maxP = modalSabores.length > 0 ? Math.max(...modalSabores.map(s => s.p)) : 0;
-  const maxG = modalSabores.length > 0 ? Math.max(...modalSabores.map(s => s.g)) : 0;
+  // calcula preço base respeitando lei federal (meio a meio = metade + metade)
+  let baseP, baseG;
+  if(modalSabores.length === 2){
+    baseP = (modalSabores[0].p / 2) + (modalSabores[1].p / 2);
+    baseG = (modalSabores[0].g / 2) + (modalSabores[1].g / 2);
+  } else if(modalSabores.length === 1){
+    baseP = modalSabores[0].p;
+    baseG = modalSabores[0].g;
+  } else {
+    baseP = 0; baseG = 0;
+  }
   const bordaP = BORDA_PRECOS[modalBordaNome]?.P || 0;
   const bordaG = BORDA_PRECOS[modalBordaNome]?.G || 0;
-  document.querySelector('#tam-P span').textContent = maxP > 0 ? `R$ ${maxP + bordaP}` : 'Pequena';
-  document.querySelector('#tam-G span').textContent = maxG > 0 ? `R$ ${maxG + bordaG}` : 'Grande';
+  const adicionaisTotal = modalAdicionais.reduce((s, a) => s + a.preco, 0);
+  document.querySelector('#tam-P span').textContent = baseP > 0 ? `R$ ${(baseP + bordaP + adicionaisTotal).toFixed(2).replace('.',',')}` : 'Pequena';
+  document.querySelector('#tam-G span').textContent = baseG > 0 ? `R$ ${(baseG + bordaG + adicionaisTotal).toFixed(2).replace('.',',')}` : 'Grande';
 }
 
 function renderizarSaboresModal(){
@@ -266,20 +295,43 @@ function atualizarInfoBorda(){
 }
 
 function calcPrecoModal(){
-  // calcula preço total: maior preço entre os sabores + custo da borda
   if(modalSabores.length === 0) return 0;
-  const precoBase = modalTamanho === 'P'
-    ? Math.max(...modalSabores.map(s => s.p))
-    : Math.max(...modalSabores.map(s => s.g));
+
+  let precoBase;
+  if(modalSabores.length === 2){
+    // LEI FEDERAL: pizza meio a meio cobra metade do preço de cada sabor
+    // independente de serem do mesmo grupo ou não
+    const s1 = modalTamanho === 'P' ? modalSabores[0].p : modalSabores[0].g;
+    const s2 = modalTamanho === 'P' ? modalSabores[1].p : modalSabores[1].g;
+    precoBase = (s1 / 2) + (s2 / 2);
+  } else {
+    // sabor único: preço normal
+    precoBase = modalTamanho === 'P' ? modalSabores[0].p : modalSabores[0].g;
+  }
+
+  // soma custo da borda
   const precoBorda = BORDA_PRECOS[modalBordaNome]?.[modalTamanho] || 0;
-  return precoBase + precoBorda;
+
+  // soma adicionais selecionados
+  const precoAdicionais = modalAdicionais.reduce((soma, a) => soma + a.preco, 0);
+
+  return precoBase + precoBorda + precoAdicionais;
 }
 
 function atualizarResumoModal(){
   // atualiza bloco de resumo com nomes dos sabores e preço total
   const preco = calcPrecoModal();
   const nomes = modalSabores.map(s => s.nome).join(' + ');
-  document.querySelector('#modalResumo span:first-child').textContent = nomes || 'Selecione ao menos 1 sabor';
+
+  // aviso de lei federal quando há 2 sabores de categorias diferentes
+  let avisoLei = '';
+  if(modalSabores.length === 2){
+    const subs = modalSabores.map(s => itens.find(i => i.nome === s.nome)?.sub);
+    if(subs[0] !== subs[1]){
+    }
+  }
+
+  document.querySelector('#modalResumo span:first-child').textContent = (nomes || 'Selecione ao menos 1 sabor') + avisoLei;
   document.getElementById('modalPreco').textContent = 'R$ ' + preco.toFixed(2).replace('.', ',');
 }
 
@@ -296,10 +348,19 @@ function confirmarPizza(){
   // monta descrição resumida para exibir no carrinho
   let descricao = `${nomes} (${modalTamanho})`;
   if(modalBordaNome !== 'Sem borda') descricao += ` + Borda ${modalBordaNome}`;
+  if(modalAdicionais.length > 0) descricao += ` + Extras: ${modalAdicionais.map(a => a.nome).join(', ')}`;
 
   // monta detalhe completo para a mensagem do WhatsApp
   let detalhe = `Pizza ${modalTamanho} — ${nomes}`;
+  if(modalSabores.length === 2){
+    const subs = modalSabores.map(s => itens.find(i => i.nome === s.nome)?.sub);
+  }
   if(modalBordaNome !== 'Sem borda') detalhe += ` | Borda ${modalBordaNome} (+R$ ${precoBorda},00)`;
+  if(modalAdicionais.length > 0){
+    const totalAdicionais = modalAdicionais.reduce((s, a) => s + a.preco, 0);
+    detalhe += ` | Adicionais: ${modalAdicionais.map(a => a.nome).join(', ')}`;
+    if(totalAdicionais > 0) detalhe += ` (+R$ ${totalAdicionais},00)`;
+  }
 
   pedido.push({ nome: descricao, detalhe, preco, tipo: 'pizza' });
 
@@ -307,6 +368,48 @@ function confirmarPizza(){
   atualizarDrawer();
   fecharModal();
   showToast('🍕 Pizza adicionada ao pedido!');
+}
+
+// ===================== ADICIONAIS =====================
+function renderizarAdicionaisModal(){
+  const grid = document.getElementById('adicionaisGrid');
+  grid.innerHTML = '';
+  ADICIONAIS_LISTA.forEach(adicional => {
+    const selecionado = modalAdicionais.some(a => a.nome === adicional.nome);
+    const labelPreco = adicional.preco === 0 ? 'Grátis' : `+R$ ${adicional.preco}`;
+    grid.innerHTML += `
+      <button class="adicional-btn ${selecionado ? 'selecionado' : ''}"
+              onclick="toggleAdicional('${adicional.nome}', ${adicional.preco})">
+        ${adicional.nome}
+        <span class="adicional-preco">${labelPreco}</span>
+      </button>`;
+  });
+  atualizarInfoAdicionais();
+}
+
+function toggleAdicional(nome, preco){
+  const idx = modalAdicionais.findIndex(a => a.nome === nome);
+  if(idx >= 0){
+    modalAdicionais.splice(idx, 1); // desmarca se já estava selecionado
+  } else {
+    modalAdicionais.push({ nome, preco }); // marca o adicional
+  }
+  renderizarAdicionaisModal();
+  atualizarLabelsTamanho();
+  atualizarResumoModal();
+}
+
+function atualizarInfoAdicionais(){
+  const el = document.getElementById('adicionaisInfo');
+  if(modalAdicionais.length === 0){
+    el.textContent = '';
+    return;
+  }
+  const nomes = modalAdicionais.map(a => a.nome).join(', ');
+  const total = modalAdicionais.reduce((s, a) => s + a.preco, 0);
+  el.textContent = total > 0
+    ? `✅ ${nomes} (+R$ ${total},00)`
+    : `✅ ${nomes} (grátis)`;
 }
 
 // ===================== BEBIDAS =====================

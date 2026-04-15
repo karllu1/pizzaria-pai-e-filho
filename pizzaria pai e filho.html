@@ -19,6 +19,7 @@
         Pai e Filho
         <span>Pizzaria</span>
       </div>
+    </div>
     <button class="carrinho-btn" onclick="abrirCarrinho()">
       🛒 Pedido
       <div id="badge">0</div>
@@ -110,6 +111,13 @@
           <button class="borda-btn" onclick="escolherBordaModal('Chocolate ao Leite', null, this)">Choc. Leite</button>
         </div>
         <p id="bordaModalInfo" class="borda-info">✅ Sem borda</p>
+      </div>
+
+      <!-- ADICIONAIS -->
+      <div class="modal-section">
+        <h3>Adicionais <span class="hint">1x cada • verduras grátis</span></h3>
+        <div class="adicionais-grid" id="adicionaisGrid"></div>
+        <p id="adicionaisInfo" class="borda-info"></p>
       </div>
 
       <!-- RESUMO DO PEDIDO -->
