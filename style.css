@@ -1,0 +1,736 @@
+:root {
+      --vermelho: #c0392b;
+      --laranja: #e67e22;
+      --laranja2: #ff5722;
+      --creme: #fff8f2;
+      --creme2: #ffeedd;
+      --escuro: #1a0a00;
+      --texto: #3d1f00;
+      --cartao: #ffffff;
+      --sombra: 0 4px 24px rgba(192,57,43,0.10);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--creme);
+      color: var(--texto);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== CABEÇALHO ===== */
+    header {
+      background: var(--escuro);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-circle {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid var(--laranja);
+      box-shadow: 0 0 0 3px rgba(255,87,34,0.25);
+    }
+
+    .logo-circle img {
+      width: 160%;
+      height: 160%;
+      object-fit: cover;
+      object-position: 30% 5%; /* centraliza nos rostos */
+      display: block;
+      margin-left: -30%;
+    }
+
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: 1.3rem;
+      line-height: 1.1;
+    }
+
+    .header-title span {
+      display: block;
+      font-size: 0.7rem;
+      font-family: 'Nunito', sans-serif;
+      color: var(--laranja);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .carrinho-btn {
+      background: var(--laranja2);
+      border: none;
+      color: white;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .carrinho-btn:hover { background: var(--vermelho); transform: scale(1.04); }
+    #badge {
+      background: #fff;
+      color: var(--vermelho);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900;
+    }
+
+    /* ===== DESTAQUE / BANNER PRINCIPAL ===== */
+    .hero {
+      background: linear-gradient(135deg, #1a0a00 0%, #3d1200 60%, #7a2500 100%);
+      padding: 52px 24px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      /* brilho decorativo em laranja */
+      background: radial-gradient(ellipse at 60% 40%, rgba(255,87,34,0.18) 0%, transparent 70%);
+    }
+    .hero-emoji {
+      font-size: 64px;
+      display: block;
+      margin-bottom: 12px;
+      animation: flutuar 3s ease-in-out infinite;
+    }
+    /* animação de flutuação da pizza */
+    @keyframes flutuar {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      color: #fff;
+      line-height: 1.15;
+      position: relative;
+    }
+    .hero h2 em {
+      font-style: normal;
+      color: var(--laranja);
+    }
+    .hero p {
+      color: rgba(255,255,255,0.72);
+      margin-top: 10px;
+      font-size: 1rem;
+      position: relative;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      position: relative;
+    }
+    .hero-btn {
+      background: var(--laranja2);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 13px 28px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .hero-btn:hover { background: var(--vermelho); transform: scale(1.04); }
+    .hero-btn.outline {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.35);
+      color: white;
+    }
+    .hero-btn.outline:hover { background: rgba(255,255,255,0.1); }
+
+    /* ===== FAIXA DE INFORMAÇÕES ===== */
+    .info-banner {
+      background: var(--laranja2);
+      color: white;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 13px 24px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-wrap: wrap;
+    }
+    .info-banner span { display: flex; align-items: center; gap: 5px; }
+
+    /* ===== CATEGORIAS ===== */
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--escuro);
+      padding: 32px 20px 0;
+      text-align: center;
+    }
+    .categorias {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .cat-card {
+      background: var(--cartao);
+      border-radius: 16px;
+      padding: 20px 10px 16px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--sombra);
+      border: 2px solid transparent;
+      transition: border 0.2s, transform 0.15s, box-shadow 0.2s;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--texto);
+    }
+    .cat-card:hover, .cat-card.ativo {
+      border-color: var(--laranja2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(255,87,34,0.18);
+      color: var(--laranja2);
+    }
+    .cat-card .cat-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+
+    /* ===== FILTROS DE SUBCATEGORIA ===== */
+    .filtros {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 10px;
+      overflow-x: auto;
+      scrollbar-width: none; /* oculta barra de rolagem no Firefox */
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .filtros::-webkit-scrollbar { display: none; } /* oculta barra de rolagem no Chrome/Safari */
+    .filtro-btn {
+      background: var(--creme2);
+      border: 2px solid transparent;
+      border-radius: 50px;
+      padding: 7px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+      color: var(--texto);
+      transition: all 0.18s;
+    }
+    .filtro-btn:hover, .filtro-btn.ativo {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
+    }
+
+    /* ===== CARDÁPIO ===== */
+    #cardapio {
+      display: none;
+      padding: 0 20px 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .item {
+      background: var(--cartao);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--sombra);
+      transition: box-shadow 0.2s, transform 0.15s;
+      animation: aparecer 0.3s ease both; /* animação de entrada */
+    }
+    @keyframes aparecer {
+      from { opacity:0; transform: translateY(12px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .item:hover { box-shadow: 0 6px 24px rgba(255,87,34,0.13); transform: translateY(-2px); }
+    .item-info p {
+      font-weight: 700;
+      font-size: 0.97rem;
+      color: var(--escuro);
+    }
+    .item-info small {
+      display: block;
+      color: #888;
+      font-size: 0.78rem;
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+    .item-info .precos {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+    }
+    .preco-tag {
+      background: var(--creme2);
+      color: var(--vermelho);
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      padding: 3px 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.15s;
+    }
+    .preco-tag:hover {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
+      transform: scale(1.06);
+    }
+    .item-add {
+      background: var(--laranja2);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 9px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .item-add:hover { background: var(--vermelho); transform: scale(1.06); }
+
+    /* ===== MODAL MONTAR PIZZA ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55); /* fundo escurecido */
+      z-index: 200;
+    }
+    .modal-overlay.aberto { display: block; }
+
+    #modalPizza {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 300;
+      transform: translateY(100%); /* começa fora da tela */
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
+    }
+    #modalPizza.aberto { transform: translateY(0); } /* desliza para cima */
+
+    .modal-handle {
+      /* alça visual para arrastar o modal */
+      width: 44px; height: 5px;
+      background: #ddd;
+      border-radius: 4px;
+      margin: 14px auto 0;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid #f0ece8;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 1;
+    }
+    .modal-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--escuro);
+    }
+    .fechar-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #888;
+    }
+    .modal-body {
+      padding: 0 20px 20px;
+    }
+    .modal-section {
+      margin-top: 20px;
+    }
+    .modal-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--escuro);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hint {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      color: #aaa;
+      font-weight: 600;
+    }
+
+    /* SELEÇÃO DE TAMANHO */
+    .tam-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .tam-btn {
+      background: var(--creme2);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--texto);
+      transition: all 0.18s;
+      line-height: 1.6;
+    }
+    .tam-btn span {
+      display: block;
+      font-size: 0.78rem;
+      color: #999;
+      font-weight: 600;
+    }
+    .tam-btn:hover, .tam-btn.ativo {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
+    }
+    .tam-btn.ativo span { color: rgba(255,255,255,0.8); }
+
+    /* LISTA DE SABORES */
+    .sabores-info {
+      font-size: 0.83rem;
+      color: var(--laranja2);
+      font-weight: 700;
+      margin-bottom: 10px;
+      min-height: 20px;
+    }
+    .sabores-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    /* estilo da barra de rolagem dos sabores */
+    .sabores-lista::-webkit-scrollbar { width: 4px; }
+    .sabores-lista::-webkit-scrollbar-track { background: #f0ece8; border-radius: 4px; }
+    .sabores-lista::-webkit-scrollbar-thumb { background: var(--laranja); border-radius: 4px; }
+    .sabor-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--creme);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      gap: 8px;
+    }
+    .sabor-item:hover { border-color: var(--laranja); }
+    .sabor-item.selecionado {
+      border-color: var(--laranja2);
+      background: #fff3e0;
+    }
+    .sabor-item.desabilitado {
+      opacity: 0.4;
+      cursor: not-allowed; /* cursor bloqueado quando máximo atingido */
+    }
+    .sabor-nome {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--escuro);
+      flex: 1;
+    }
+    .sabor-preco {
+      font-size: 0.8rem;
+      color: var(--vermelho);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .sabor-check {
+      /* caixa de marcação do sabor */
+      width: 20px; height: 20px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .sabor-item.selecionado .sabor-check {
+      background: var(--laranja2);
+      border-color: var(--laranja2);
+      color: white;
+    }
+
+    /* SELEÇÃO DE BORDA */
+    .borda-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .borda-btn {
+      background: white;
+      border: 2px solid var(--laranja);
+      color: var(--texto);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .borda-btn:hover, .borda-btn.ativo {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
+    }
+    .borda-info {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--vermelho);
+      font-weight: 700;
+    }
+
+    /* RESUMO E BOTÃO DE CONFIRMAR */
+    .modal-resumo {
+      background: var(--creme2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--texto);
+    }
+    #modalPreco {
+      font-size: 1.2rem;
+      color: var(--laranja2);
+      font-family: 'Playfair Display', serif;
+    }
+    .confirmar-btn {
+      display: block;
+      width: 100%;
+      background: var(--laranja2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(255,87,34,0.3);
+    }
+    .confirmar-btn:hover { background: var(--vermelho); transform: scale(1.01); }
+
+    /* ===== GAVETA DO CARRINHO ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5); /* fundo semitransparente */
+      z-index: 200;
+    }
+    .overlay.aberto { display: block; }
+
+    #drawer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 0 0 32px;
+      max-height: 85vh;
+      overflow-y: auto;
+      z-index: 300;
+      transform: translateY(100%); /* começa fora da tela */
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
+    }
+    #drawer.aberto { transform: translateY(0); } /* desliza para cima */
+
+    .drawer-handle {
+      /* alça visual para arrastar a gaveta */
+      width: 44px; height: 5px;
+      background: #ddd;
+      border-radius: 4px;
+      margin: 14px auto 0;
+    }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 10px;
+      border-bottom: 1px solid #f0ece8;
+    }
+    .drawer-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--escuro);
+    }
+
+    #listaPedido {
+      list-style: none;
+      padding: 12px 20px;
+    }
+    #listaPedido li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px dashed #f0ece8;
+      font-size: 0.9rem;
+      color: var(--texto);
+      font-weight: 600;
+      gap: 8px;
+    }
+    #listaPedido li .item-desc {
+      flex: 1;
+      line-height: 1.4;
+    }
+    #listaPedido li .item-desc small {
+      display: block;
+      color: #aaa;
+      font-size: 0.75rem;
+      font-weight: 400;
+    }
+    #listaPedido li .remover {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+    #listaPedido li .remover:hover { color: var(--vermelho); }
+
+    .drawer-total {
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--escuro);
+      font-family: 'Playfair Display', serif;
+    }
+    .drawer-total span:last-child { color: var(--laranja2); font-size: 1.3rem; }
+
+    .wpp-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 20px 0;
+      background: #25d366; /* verde do WhatsApp */
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      width: calc(100% - 40px);
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    }
+    .wpp-btn:hover { background: #1db954; transform: scale(1.02); }
+    .wpp-btn svg { width: 22px; height: 22px; fill: white; }
+
+    .carrinho-vazio {
+      text-align: center;
+      padding: 40px 20px;
+      color: #bbb;
+      font-size: 0.95rem;
+    }
+    .carrinho-vazio .big { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+    /* ===== NOTIFICAÇÃO FLUTUANTE  ===== */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px); /* começa escondido abaixo */
+      background: var(--escuro);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 500;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); } /* sobe para aparecer */
+
+    /* ===== RODAPÉ E TALVEZ RODEMÃO ===== */
+    footer {
+      background: var(--escuro);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.82rem;
+      margin-top: 40px;
+    }
+    footer strong { color: var(--laranja); }
+
+    /* ===== RESPONSIVO (TELAS PEQUENAS) ===== */
+    @media (max-width: 400px) {
+      .hero h2 { font-size: 1.6rem; }
+      .categorias { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    }

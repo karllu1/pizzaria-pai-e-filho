@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pai e Filho Pizzaria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- CABEÇALHO -->
+  <header>
+    <div class="header-logo">
+      <div class="logo-circle">
+        <img src="logo%20pizzariapaiefilho.jpeg" alt="Pai e Filho Pizzaria">
+      </div>
+    </div>
+      <div class="header-title">
+        Pai e Filho
+        <span>Pizzaria</span>
+      </div>
+    <button class="carrinho-btn" onclick="abrirCarrinho()">
+      🛒 Pedido
+      <div id="badge">0</div>
+    </button>
+  </header>
+
+  <!-- DESTAQUE / BANNER PRINCIPAL -->
+  <section class="hero">
+    <span class="hero-emoji">🍕</span>
+    <h2>A pizza que une <em>gerações</em></h2>
+    <p>Monte seu pedido com até 2 sabores e borda recheada</p>
+    <div class="hero-btns">
+      <button class="hero-btn" onclick="irParaCategorias()">Ver cardápio completo</button>
+      <button class="hero-btn outline" onclick="abrirCarrinho()">🛒 Meu pedido</button>
+    </div>
+  </section>
+
+  <!-- FAIXA DE INFORMAÇÕES -->
+  <div class="info-banner">
+    <span>📍 Entrega na região</span>
+    <span>💬 Pedido via WhatsApp</span>
+  </div>
+
+  <!-- CATEGORIAS -->
+  <h2 class="sec-title" id="sec-cat">O que você quer hoje?</h2>
+  <div class="categorias">
+    <div class="cat-card" id="cat-pizza" onclick="ativarCat('pizza')">
+      <span class="cat-emoji">🍕</span>
+      Pizzas
+    </div>
+    <div class="cat-card" id="cat-doce" onclick="ativarCat('doce')">
+      <span class="cat-emoji">🍫</span>
+      Doces
+    </div>
+    <div class="cat-card" id="cat-bebida" onclick="ativarCat('bebida')">
+      <span class="cat-emoji">🥤</span>
+      Bebidas
+    </div>
+  </div>
+
+  <!-- FILTROS DE SUBCATEGORIA -->
+  <div class="filtros" id="filtros" style="display:none;">
+    <button class="filtro-btn ativo" id="f-todos" onclick="filtrar('todos')">Todos</button>
+    <button class="filtro-btn" id="f-tradicionais" onclick="filtrar('tradicionais')">Tradicionais</button>
+    <button class="filtro-btn" id="f-especiais" onclick="filtrar('especiais')">Especiais</button>
+  </div>
+
+  <!-- CARDÁPIO -->
+  <div id="cardapio"></div>
+
+  <!-- MODAL MONTAR PIZZA -->
+  <div class="modal-overlay" id="modalOverlay" onclick="fecharModal()"></div>
+  <div id="modalPizza">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2>🍕 Montar Pizza</h2>
+      <button class="fechar-btn" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- TAMANHO -->
+      <div class="modal-section">
+        <h3>Tamanho</h3>
+        <div class="tam-grid">
+          <button class="tam-btn ativo" id="tam-P" onclick="escolherTamanho('P', this)">
+            🍕 Pequena<br><span>R$ base</span>
+          </button>
+          <button class="tam-btn" id="tam-G" onclick="escolherTamanho('G', this)">
+            🍕 Grande<br><span>R$ base</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SABORES -->
+      <div class="modal-section">
+        <h3>Sabores <span class="hint">Escolha até 2</span></h3>
+        <p id="saboresSelecionados" class="sabores-info">Nenhum sabor selecionado</p>
+        <div id="listaSabores" class="sabores-lista"></div>
+      </div>
+
+      <!-- BORDA RECHEADA -->
+      <div class="modal-section">
+        <h3>Borda recheada</h3>
+        <div class="borda-grid" id="bordaGrid">
+          <button class="borda-btn ativo" onclick="escolherBordaModal('Sem borda', 0, this)">Sem borda</button>
+          <button class="borda-btn" onclick="escolherBordaModal('Requeijão', null, this)">Requeijão</button>
+          <button class="borda-btn" onclick="escolherBordaModal('Cheddar', null, this)">Cheddar</button>
+          <button class="borda-btn" onclick="escolherBordaModal('Chocolate Branco', null, this)">Choc. Branco</button>
+          <button class="borda-btn" onclick="escolherBordaModal('Chocolate ao Leite', null, this)">Choc. Leite</button>
+        </div>
+        <p id="bordaModalInfo" class="borda-info">✅ Sem borda</p>
+      </div>
+
+      <!-- RESUMO DO PEDIDO -->
+      <div class="modal-resumo" id="modalResumo">
+        <span>Selecione sabor e tamanho</span>
+        <span id="modalPreco">R$ 0,00</span>
+      </div>
+
+      <button class="confirmar-btn" onclick="confirmarPizza()">✅ Adicionar ao Pedido</button>
+    </div>
+  </div>
+
+  <!-- FUNDO ESCURO DO CARRINHO -->
+  <div class="overlay" id="overlay" onclick="fecharCarrinho()"></div>
+
+  <!-- GAVETA DO CARRINHO -->
+  <div id="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <h2>🛒 Seu Pedido</h2>
+      <button class="fechar-btn" onclick="fecharCarrinho()">✕</button>
+    </div>
+    <ul id="listaPedido">
+      <li class="carrinho-vazio">
+        <span class="big">🍕</span>
+        Seu pedido está vazio.<br>Adicione itens do cardápio!
+      </li>
+    </ul>
+    <div class="drawer-total">
+      <span>Total</span>
+      <span id="total">R$ 0,00</span>
+    </div>
+    <button class="wpp-btn" onclick="finalizarPedido()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.837L.057 23.882l6.204-1.627A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.374l-.36-.214-3.724.977.997-3.635-.234-.374A9.818 9.818 0 0112 2.182c5.428 0 9.818 4.39 9.818 9.818S17.428 21.818 12 21.818z"/>
+      </svg>
+      Finalizar pelo WhatsApp
+    </button>
+  </div>
+
+  <!-- NOTIFICAÇÃO FLUTUANTE (TOAST) -->
+  <div id="toast">✅ Item adicionado!</div>
+
+  <footer>
+    <p><strong>Pai e Filho Pizzaria</strong></p>
+    <p style="margin-top:6px;">📱 (83) 9 9166-4896 &nbsp;•&nbsp; Pedidos via WhatsApp</p>
+    <p style="margin-top:8px; font-size:0.75rem;">Feito com amor para uma pizza ainda melhor</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
