@@ -44,6 +44,67 @@ const itens = [
   { nome:"Pepsi 1L",               preco:8,  cat:"bebida" },
 ];
 
+// ===================== DEFINIÇÃO DOS COMBOS =====================
+// Apenas pizzas tradicionais salgadas são permitidas nos combos
+const COMBOS = [
+  {
+    id: 'tradicional',
+    nome: 'Combo Tradicional',
+    emoji: '🍕',
+    badge: 'Mais pedido',
+    preco: 45,
+    descricaoItens: [
+      '1 Pizza Tradicional G (à sua escolha)',
+      'Guaraná Antarctica 1L ou Pepsi 1L',
+      'Entrega inclusa'
+    ],
+    descricaoModal: '🍕 1 Pizza Tradicional G + 🥤 Refrigerante 1L + 🛵 Entrega  — tudo por R$ 45,00',
+    pizzas: [
+      { slot: 'Pizza (sabores até 2)', tamanho: 'G', qtd: 1 }
+    ],
+    bebidas: ['Guaraná Antarctica 1L', 'Pepsi 1L'],
+    temEscolhaBebida: true,
+  },
+  {
+    id: 'familia',
+    nome: 'Combo Família',
+    emoji: '👨‍👩‍👧',
+    badge: 'Para a família',
+    preco: 90,
+    descricaoItens: [
+      '2 Pizzas Tradicionais G (à sua escolha)',
+      'Coca-Cola 1,5L',
+      'Entrega inclusa'
+    ],
+    descricaoModal: '🍕 2 Pizzas Tradicionais G + 🥤 Coca-Cola 1,5L + 🛵 Entrega  — tudo por R$ 90,00',
+    pizzas: [
+      { slot: '1ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
+      { slot: '2ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
+    ],
+    bebidas: ['Coca-Cola 1,5L'],
+    temEscolhaBebida: false,
+  },
+  {
+    id: 'doce',
+    nome: 'Combo Loucos por Doce',
+    emoji: '🍫',
+    badge: 'Especial doces',
+    preco: 55,
+    descricaoItens: [
+      '1 Pizza Tradicional G (salgada ou doce)',
+      '1 Pizza Tradicional P (salgada ou doce)',
+      'Entrega inclusa'
+    ],
+    descricaoModal: '🍕 1 Pizza Tradicional G + 🍕 1 Pizza Tradicional P + 🛵 Entrega  — tudo por R$ 55,00',
+    pizzas: [
+      { slot: 'Pizza Grande (sabores até 2)', tamanho: 'G', qtd: 1 },
+      { slot: 'Pizza Pequena (sabores até 2)', tamanho: 'P', qtd: 1 },
+    ],
+    bebidas: [],
+    temEscolhaBebida: false,
+  },
+];
+
 // Lista de adicionais disponíveis (preco: 0 = grátis / verduras)
 const ADICIONAIS_LISTA = [
   { nome: 'Calabresa',   preco: 5 },
@@ -61,7 +122,7 @@ const ADICIONAIS_LISTA = [
   { nome: 'Cebola',      preco: 0 },
 ];
 
-// Preços adicionais de borda por tamanho (P = Pequena, G = Grande)
+// Preços adicionais de borda por tamanho
 const BORDA_PRECOS = {
   'Sem borda':           { P: 0,  G: 0  },
   'Requeijão':           { P: 5,  G: 8  },
@@ -70,17 +131,101 @@ const BORDA_PRECOS = {
   'Chocolate ao Leite':  { P: 5,  G: 9  },
 };
 
-// ===================== ESTADO DA APLICAÇÃO =====================
-let pedido = [];        // lista de itens no carrinho
-let catAtiva = null;    // categoria selecionada atualmente
-let filtroAtivo = 'todos'; // filtro de subcategoria ativo
+// ===================== HORÁRIO DE FUNCIONAMENTO =====================
+// Segunda: fechado
+// Terça a Domingo: pedidos a partir 17:15, funciona 17:30–22:00
+function verificarHorario() {
+  const agora = new Date();
+  // 0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sab
+  const diaSemana = agora.getDay();
+  const hora = agora.getHours();
+  const minuto = agora.getMinutes();
+  const totalMinutos = hora * 60 + minuto;
 
-// Estado interno do modal de montar pizza
+  const PRE_ABERTURA   = 17 * 60 + 15; // 17:15
+  const ABERTURA       = 17 * 60 + 30; // 17:30
+  const FECHAMENTO     = 22 * 60;       // 22:00
+
+  const banner = document.getElementById('horarioBanner');
+
+  if (diaSemana === 1) {
+    // Segunda-feira: fechado
+    banner.className = 'horario-banner segunda';
+    banner.innerHTML = '😴 Hoje é segunda-feira — estamos descansando! Voltamos terça às 17h30';
+    return;
+  }
+
+  if (totalMinutos >= PRE_ABERTURA && totalMinutos < ABERTURA) {
+    // Pré-abertura: pode fazer pedido mas ainda não está servindo
+    const minRestantes = ABERTURA - totalMinutos;
+    banner.className = 'horario-banner pre-abertura';
+    banner.innerHTML = `<span class="pulse"></span> Abrimos em ${minRestantes} min! Já pode montar seu pedido 🍕`;
+    return;
+  }
+
+  if (totalMinutos >= ABERTURA && totalMinutos < FECHAMENTO) {
+    // Aberto!
+    const minParaFechar = FECHAMENTO - totalMinutos;
+    const hFechar = Math.floor(minParaFechar / 60);
+    const mFechar = minParaFechar % 60;
+    let textoFecha = '';
+    if (hFechar > 0) textoFecha = `Fechamos em ${hFechar}h${mFechar > 0 ? mFechar + 'min' : ''}`;
+    else textoFecha = `Fechamos em ${mFechar} min`;
+    banner.className = 'horario-banner aberto';
+    banner.innerHTML = `<span class="pulse"></span> Estamos abertos! 🍕 ${textoFecha}`;
+    return;
+  }
+
+  // Fora do horário
+  const diasNomes = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  let proximaAbertura = '';
+  const aindaAbreHoje = totalMinutos < ABERTURA; // antes das 17h30, ainda abre hoje
+
+  if (aindaAbreHoje) {
+    // Ainda vai abrir hoje
+    proximaAbertura = 'Abrimos hoje às 17h30';
+  } else if (diaSemana === 0) {
+    // Domingo após as 22h: segunda é fechado, próxima é terça
+    proximaAbertura = 'Próxima abertura: terça-feira às 17h30';
+  } else {
+    // Após o fechamento: verifica amanhã
+    const amanha = (diaSemana + 1) % 7;
+    if (amanha === 1) proximaAbertura = 'Próxima abertura: terça-feira às 17h30'; // amanhã é segunda
+    else proximaAbertura = `Abrimos amanhã (${diasNomes[amanha]}) às 17h30`;
+  }
+  banner.className = 'horario-banner fechado';
+  banner.innerHTML = `🔒 Fechado no momento — ${proximaAbertura}`;
+}
+
+// Retorna true se está no horário de atendimento (17:30–22:00, exceto segunda)
+function estaAberto() {
+  const agora = new Date();
+  const diaSemana = agora.getDay();
+  if (diaSemana === 1) return false;
+  const totalMinutos = agora.getHours() * 60 + agora.getMinutes();
+  return totalMinutos >= (17 * 60 + 30) && totalMinutos < (22 * 60);
+}
+
+// Chama ao carregar e atualiza a cada 30 segundos
+verificarHorario();
+setInterval(verificarHorario, 30000);
+
+// ===================== ESTADO DA APLICAÇÃO =====================
+let pedido = [];
+let catAtiva = null;
+let filtroAtivo = 'todos';
+
+// Estado do modal de montar pizza
 let modalTamanho = 'P';
 let modalSabores = [];
 let modalBordaNome = 'Sem borda';
 let modalCatAtual = 'pizza';
-let modalAdicionais = [];       // adicionais selecionados (máx. 1x cada)
+let modalAdicionais = [];
+
+// Estado do modal de combo
+let comboAtual = null;      // objeto do combo selecionado
+let comboSabores = [];      // array de arrays, um por slot de pizza
+let comboBebidaSelecionada = null;
 
 // ===================== NAVEGAÇÃO =====================
 function irParaCategorias(){
@@ -89,11 +234,9 @@ function irParaCategorias(){
 
 function ativarCat(cat){
   catAtiva = cat;
-  // remove destaque de todas as categorias e aplica na selecionada
   document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('ativo'));
   document.getElementById('cat-'+cat).classList.add('ativo');
 
-  // exibe filtros apenas para pizzas e doces
   const filtros = document.getElementById('filtros');
   if(cat === 'pizza' || cat === 'doce'){
     filtros.style.display = 'flex';
@@ -106,13 +249,11 @@ function ativarCat(cat){
 
   renderizar(cat, 'todos');
   document.getElementById('cardapio').style.display = 'block';
-  // pequeno atraso para suavizar a rolagem após renderização
   setTimeout(()=>{ document.getElementById('cardapio').scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
 }
 
 function filtrar(sub){
   filtroAtivo = sub;
-  // atualiza botão de filtro ativo
   document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
   document.getElementById('f-'+sub).classList.add('ativo');
   renderizar(catAtiva, sub);
@@ -121,7 +262,12 @@ function filtrar(sub){
 // ===================== RENDERIZAR CARDÁPIO =====================
 function renderizar(cat, sub){
   const cardapio = document.getElementById('cardapio');
-  // filtra itens pela categoria e subcategoria
+
+  if (cat === 'combo') {
+    renderizarCombos();
+    return;
+  }
+
   let lista = itens.filter(i => i.cat === cat);
   if(sub && sub !== 'todos') lista = lista.filter(i => i.sub === sub);
 
@@ -129,7 +275,6 @@ function renderizar(cat, sub){
 
   lista.forEach((item, idx) => {
     if(item.cat === 'bebida'){
-      // cartão de bebida com botão de adicionar direto
       cardapio.innerHTML += `
         <div class="item" style="animation-delay:${idx*0.04}s">
           <div class="item-info">
@@ -141,7 +286,6 @@ function renderizar(cat, sub){
           </button>
         </div>`;
     } else {
-      // cartão de pizza/doce com botões de tamanho que abrem o modal
       cardapio.innerHTML += `
         <div class="item" style="animation-delay:${idx*0.04}s">
           <div class="item-info">
@@ -157,16 +301,40 @@ function renderizar(cat, sub){
   });
 }
 
+// ===================== RENDERIZAR COMBOS =====================
+function renderizarCombos(){
+  const cardapio = document.getElementById('cardapio');
+  cardapio.innerHTML = `<div class="combo-grid">` + COMBOS.map((combo, idx) => `
+    <div class="combo-card" style="animation-delay:${idx*0.1}s">
+      <div class="combo-img-wrapper">
+        <div class="combo-img-overlay"></div>
+        <span class="combo-img-emoji">${combo.emoji}</span>
+        <span class="combo-badge">${combo.badge}</span>
+      </div>
+      <div class="combo-body">
+        <div class="combo-info">
+          <h3>${combo.nome}</h3>
+          <ul class="combo-itens">
+            ${combo.descricaoItens.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="combo-preco-area">
+          <div class="combo-preco">R$ ${combo.preco},00</div>
+          <button class="combo-btn" onclick="abrirModalCombo('${combo.id}')">Montar</button>
+        </div>
+      </div>
+    </div>
+  `).join('') + `</div>`;
+}
+
 // ===================== MODAL MONTAR PIZZA =====================
 function abrirModal(cat, nomeInicial, precoP, precoG, tam){
-  // inicializa estado do modal com o item clicado
   modalTamanho = tam;
   modalSabores = [{ nome: nomeInicial, p: precoP, g: precoG }];
   modalBordaNome = 'Sem borda';
   modalCatAtual = cat;
-  modalAdicionais = []; // reseta adicionais
+  modalAdicionais = [];
 
-  // destaca o tamanho selecionado
   document.querySelectorAll('.tam-btn').forEach(b => b.classList.remove('ativo'));
   document.getElementById('tam-' + tam).classList.add('ativo');
 
@@ -174,13 +342,11 @@ function abrirModal(cat, nomeInicial, precoP, precoG, tam){
   renderizarSaboresModal();
   renderizarAdicionaisModal();
 
-  // reseta seleção de borda para "Sem borda"
   document.querySelectorAll('.borda-btn').forEach(b => b.classList.remove('ativo'));
   document.querySelector('.borda-btn').classList.add('ativo');
   atualizarInfoBorda();
   atualizarResumoModal();
 
-  // abre o modal com animação
   document.getElementById('modalPizza').classList.add('aberto');
   document.getElementById('modalOverlay').classList.add('aberto');
 }
@@ -191,7 +357,6 @@ function fecharModal(){
 }
 
 function atualizarLabelsTamanho(){
-  // calcula preço base respeitando lei federal (meio a meio = metade + metade)
   let baseP, baseG;
   if(modalSabores.length === 2){
     baseP = (modalSabores[0].p / 2) + (modalSabores[1].p / 2);
@@ -211,13 +376,12 @@ function atualizarLabelsTamanho(){
 
 function renderizarSaboresModal(){
   const lista = document.getElementById('listaSabores');
-  // lista todos os sabores de pizza e doce disponíveis
   const saboresCat = itens.filter(i => i.cat === 'pizza' || i.cat === 'doce');
 
   lista.innerHTML = '';
   saboresCat.forEach(item => {
     const selecionado = modalSabores.some(s => s.nome === item.nome);
-    const maxAtingido = modalSabores.length >= 2 && !selecionado; // bloqueia se já tem 2 sabores
+    const maxAtingido = modalSabores.length >= 2 && !selecionado;
     lista.innerHTML += `
       <div class="sabor-item ${selecionado ? 'selecionado' : ''} ${maxAtingido ? 'desabilitado' : ''}"
            onclick="${maxAtingido ? '' : `toggleSabor('${item.nome}', ${item.p}, ${item.g})`}">
@@ -233,7 +397,6 @@ function renderizarSaboresModal(){
 }
 
 function atualizarTextoSabores(){
-  // atualiza o texto que mostra os sabores selecionados
   const el = document.getElementById('saboresSelecionados');
   if(modalSabores.length === 0){
     el.textContent = 'Nenhum sabor selecionado';
@@ -245,18 +408,17 @@ function atualizarTextoSabores(){
 function toggleSabor(nome, precoP, precoG){
   const idx = modalSabores.findIndex(s => s.nome === nome);
   if(idx >= 0){
-    // impede remover o único sabor restante
     if(modalSabores.length === 1){
       showToast('⚠️ Selecione pelo menos 1 sabor!');
       return;
     }
-    modalSabores.splice(idx, 1); // remove sabor já selecionado
+    modalSabores.splice(idx, 1);
   } else {
     if(modalSabores.length >= 2){
       showToast('⚠️ Máximo 2 sabores por pizza!');
       return;
     }
-    modalSabores.push({ nome, p: precoP, g: precoG }); // adiciona novo sabor
+    modalSabores.push({ nome, p: precoP, g: precoG });
   }
   renderizarSaboresModal();
   atualizarLabelsTamanho();
@@ -265,7 +427,6 @@ function toggleSabor(nome, precoP, precoG){
 
 function escolherTamanho(tam, btn){
   modalTamanho = tam;
-  // atualiza destaque visual do tamanho selecionado
   document.querySelectorAll('.tam-btn').forEach(b => b.classList.remove('ativo'));
   btn.classList.add('ativo');
   atualizarLabelsTamanho();
@@ -275,7 +436,6 @@ function escolherTamanho(tam, btn){
 
 function escolherBordaModal(nome, _, btn){
   modalBordaNome = nome;
-  // atualiza destaque visual da borda selecionada
   document.querySelectorAll('.borda-btn').forEach(b => b.classList.remove('ativo'));
   btn.classList.add('ativo');
   atualizarInfoBorda();
@@ -284,7 +444,6 @@ function escolherBordaModal(nome, _, btn){
 }
 
 function atualizarInfoBorda(){
-  // exibe o custo adicional da borda selecionada
   const precos = BORDA_PRECOS[modalBordaNome];
   const el = document.getElementById('bordaModalInfo');
   if(!precos || precos.P === 0){
@@ -299,39 +458,23 @@ function calcPrecoModal(){
 
   let precoBase;
   if(modalSabores.length === 2){
-    // LEI FEDERAL: pizza meio a meio cobra metade do preço de cada sabor
-    // independente de serem do mesmo grupo ou não
     const s1 = modalTamanho === 'P' ? modalSabores[0].p : modalSabores[0].g;
     const s2 = modalTamanho === 'P' ? modalSabores[1].p : modalSabores[1].g;
     precoBase = (s1 / 2) + (s2 / 2);
   } else {
-    // sabor único: preço normal
     precoBase = modalTamanho === 'P' ? modalSabores[0].p : modalSabores[0].g;
   }
 
-  // soma custo da borda
   const precoBorda = BORDA_PRECOS[modalBordaNome]?.[modalTamanho] || 0;
-
-  // soma adicionais selecionados
   const precoAdicionais = modalAdicionais.reduce((soma, a) => soma + a.preco, 0);
 
   return precoBase + precoBorda + precoAdicionais;
 }
 
 function atualizarResumoModal(){
-  // atualiza bloco de resumo com nomes dos sabores e preço total
   const preco = calcPrecoModal();
   const nomes = modalSabores.map(s => s.nome).join(' + ');
-
-  // aviso de lei federal quando há 2 sabores de categorias diferentes
-  let avisoLei = '';
-  if(modalSabores.length === 2){
-    const subs = modalSabores.map(s => itens.find(i => i.nome === s.nome)?.sub);
-    if(subs[0] !== subs[1]){
-    }
-  }
-
-  document.querySelector('#modalResumo span:first-child').textContent = (nomes || 'Selecione ao menos 1 sabor') + avisoLei;
+  document.querySelector('#modalResumo span:first-child').textContent = nomes || 'Selecione ao menos 1 sabor';
   document.getElementById('modalPreco').textContent = 'R$ ' + preco.toFixed(2).replace('.', ',');
 }
 
@@ -345,16 +488,11 @@ function confirmarPizza(){
   const preco = calcPrecoModal();
   const precoBorda = BORDA_PRECOS[modalBordaNome]?.[modalTamanho] || 0;
 
-  // monta descrição resumida para exibir no carrinho
   let descricao = `${nomes} (${modalTamanho})`;
   if(modalBordaNome !== 'Sem borda') descricao += ` + Borda ${modalBordaNome}`;
   if(modalAdicionais.length > 0) descricao += ` + Extras: ${modalAdicionais.map(a => a.nome).join(', ')}`;
 
-  // monta detalhe completo para a mensagem do WhatsApp
   let detalhe = `Pizza ${modalTamanho} — ${nomes}`;
-  if(modalSabores.length === 2){
-    const subs = modalSabores.map(s => itens.find(i => i.nome === s.nome)?.sub);
-  }
   if(modalBordaNome !== 'Sem borda') detalhe += ` | Borda ${modalBordaNome} (+R$ ${precoBorda},00)`;
   if(modalAdicionais.length > 0){
     const totalAdicionais = modalAdicionais.reduce((s, a) => s + a.preco, 0);
@@ -390,9 +528,9 @@ function renderizarAdicionaisModal(){
 function toggleAdicional(nome, preco){
   const idx = modalAdicionais.findIndex(a => a.nome === nome);
   if(idx >= 0){
-    modalAdicionais.splice(idx, 1); // desmarca se já estava selecionado
+    modalAdicionais.splice(idx, 1);
   } else {
-    modalAdicionais.push({ nome, preco }); // marca o adicional
+    modalAdicionais.push({ nome, preco });
   }
   renderizarAdicionaisModal();
   atualizarLabelsTamanho();
@@ -412,9 +550,188 @@ function atualizarInfoAdicionais(){
     : `✅ ${nomes} (grátis)`;
 }
 
+// ===================== MODAL COMBO =====================
+function abrirModalCombo(comboId) {
+  comboAtual = COMBOS.find(c => c.id === comboId);
+  if (!comboAtual) return;
+
+  // Inicializa arrays de sabores, um por slot de pizza
+  comboSabores = comboAtual.pizzas.map(() => []);
+  comboBebidaSelecionada = comboAtual.bebidas.length === 1 ? comboAtual.bebidas[0] : null;
+
+  // Título
+  document.getElementById('modalComboTitulo').textContent = `🎁 ${comboAtual.nome}`;
+
+  // Descrição
+  document.getElementById('modalComboDescricao').textContent = comboAtual.descricaoModal;
+
+  // Slots de pizza
+  const container = document.getElementById('comboPizzasContainer');
+  container.innerHTML = '';
+  comboAtual.pizzas.forEach((pizza, idx) => {
+    container.innerHTML += `
+      <div class="combo-pizza-slot">
+        <div class="modal-section">
+          <h3>${pizza.slot} <span class="hint">(Tamanho ${pizza.tamanho}) • Escolha até 2 sabores tradicionais</span></h3>
+          <p class="combo-pizza-selecionada" id="comboSaborInfo${idx}">Nenhum sabor selecionado</p>
+          <div class="sabores-lista" id="comboSaboresLista${idx}" style="max-height:180px;"></div>
+        </div>
+      </div>`;
+  });
+
+  // Bebida (se tiver escolha)
+  const bebidaContainer = document.getElementById('comboBebidaContainer');
+  if (comboAtual.temEscolhaBebida) {
+    bebidaContainer.style.display = 'block';
+    const opcoes = document.getElementById('comboBebidaOpcoes');
+    opcoes.innerHTML = '';
+    comboAtual.bebidas.forEach((beb, i) => {
+      opcoes.innerHTML += `
+        <button class="borda-btn ${i === 0 ? 'ativo' : ''}" onclick="escolherComboBebida('${beb}', this)">
+          ${beb}
+        </button>`;
+    });
+    if (!comboBebidaSelecionada) comboBebidaSelecionada = comboAtual.bebidas[0];
+  } else {
+    bebidaContainer.style.display = 'none';
+  }
+
+  // Renderiza os sabores de cada slot
+  comboAtual.pizzas.forEach((_, idx) => renderizarSaboresCombo(idx));
+
+  atualizarResumoCombo();
+
+  document.getElementById('modalCombo').classList.add('aberto');
+  document.getElementById('modalComboOverlay').classList.add('aberto');
+}
+
+function fecharModalCombo() {
+  document.getElementById('modalCombo').classList.remove('aberto');
+  document.getElementById('modalComboOverlay').classList.remove('aberto');
+}
+
+// Só mostra pizzas tradicionais (salgadas e doces)
+function getSaboresTradicionais() {
+  return itens.filter(i => i.sub === 'tradicionais' && (i.cat === 'pizza' || i.cat === 'doce'));
+}
+
+function renderizarSaboresCombo(slotIdx) {
+  const lista = document.getElementById(`comboSaboresLista${slotIdx}`);
+  if (!lista) return;
+
+  // No combo "loucos por doce", o slot 1 (pizza P) só aceita doces tradicionais
+  let saboresTrad;
+  if (comboAtual && comboAtual.id === 'doce' && slotIdx === 1) {
+    saboresTrad = itens.filter(i => i.cat === 'doce' && i.sub === 'tradicionais');
+  } else {
+    saboresTrad = getSaboresTradicionais();
+  }
+
+  const selecionados = comboSabores[slotIdx] || [];
+
+  lista.innerHTML = '';
+  saboresTrad.forEach(item => {
+    const selecionado = selecionados.some(s => s.nome === item.nome);
+    const maxAtingido = selecionados.length >= 2 && !selecionado;
+    const catLabel = item.cat === 'doce' ? ' 🍫' : '';
+    lista.innerHTML += `
+      <div class="sabor-item ${selecionado ? 'selecionado' : ''} ${maxAtingido ? 'desabilitado' : ''}"
+           onclick="${maxAtingido ? '' : `toggleSaborCombo(${slotIdx}, '${item.nome}', ${item.p}, ${item.g})`}">
+        <div class="sabor-nome">${item.nome}${catLabel}</div>
+        <div class="sabor-check">${selecionado ? '✓' : ''}</div>
+      </div>`;
+  });
+
+  // Atualiza texto informativo do slot
+  const infoEl = document.getElementById(`comboSaborInfo${slotIdx}`);
+  if (infoEl) {
+    infoEl.textContent = selecionados.length > 0
+      ? '✅ ' + selecionados.map(s => s.nome).join(' + ')
+      : 'Nenhum sabor selecionado';
+  }
+}
+
+function toggleSaborCombo(slotIdx, nome, precoP, precoG) {
+  const selecionados = comboSabores[slotIdx];
+  const idx = selecionados.findIndex(s => s.nome === nome);
+  if (idx >= 0) {
+    if (selecionados.length === 1) {
+      showToast('⚠️ Selecione pelo menos 1 sabor!');
+      return;
+    }
+    selecionados.splice(idx, 1);
+  } else {
+    if (selecionados.length >= 2) {
+      showToast('⚠️ Máximo 2 sabores por pizza!');
+      return;
+    }
+    selecionados.push({ nome, p: precoP, g: precoG });
+  }
+  renderizarSaboresCombo(slotIdx);
+  atualizarResumoCombo();
+}
+
+function escolherComboBebida(nome, btn) {
+  comboBebidaSelecionada = nome;
+  document.querySelectorAll('#comboBebidaOpcoes .borda-btn').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  atualizarResumoCombo();
+}
+
+function atualizarResumoCombo() {
+  if (!comboAtual) return;
+  const pizzasOk = comboSabores.every(s => s.length > 0);
+  const textoEl = document.getElementById('comboResumoTexto');
+
+  if (!pizzasOk) {
+    textoEl.textContent = 'Selecione os sabores de todas as pizzas';
+  } else {
+    const pizzasTexto = comboSabores.map((s, i) =>
+      `Pizza ${i+1}: ${s.map(x => x.nome).join(' + ')}`
+    ).join(' | ');
+    const bebidaTexto = comboBebidaSelecionada ? ` | ${comboBebidaSelecionada}` : '';
+    textoEl.textContent = pizzasTexto + bebidaTexto;
+  }
+
+  document.getElementById('comboPreco').textContent = `R$ ${comboAtual.preco},00`;
+}
+
+function confirmarCombo() {
+  if (!comboAtual) return;
+
+  // Valida que todos os slots têm pelo menos 1 sabor
+  for (let i = 0; i < comboSabores.length; i++) {
+    if (comboSabores[i].length === 0) {
+      showToast(`⚠️ Escolha o sabor da ${i + 1}ª pizza!`);
+      return;
+    }
+  }
+
+  // Monta descrição resumida para o carrinho
+  const pizzasNomes = comboSabores.map((s, i) => {
+    const tam = comboAtual.pizzas[i].tamanho;
+    return `Pizza ${tam}: ${s.map(x => x.nome).join(' + ')}`;
+  }).join(', ');
+
+  const bebidaDesc = comboBebidaSelecionada ? ` + ${comboBebidaSelecionada}` : '';
+  const nomePedido = `🎁 ${comboAtual.nome}`;
+  const detalhe = `${comboAtual.nome} — ${pizzasNomes}${bebidaDesc} + Entrega`;
+
+  pedido.push({
+    nome: nomePedido,
+    detalhe,
+    preco: comboAtual.preco,
+    tipo: 'combo'
+  });
+
+  atualizarBadge();
+  atualizarDrawer();
+  fecharModalCombo();
+  showToast('🎁 Combo adicionado ao pedido!');
+}
+
 // ===================== BEBIDAS =====================
 function add(nome, preco){
-  // adiciona bebida diretamente ao pedido
   pedido.push({ nome, detalhe: nome, preco, tipo:'outro' });
   atualizarBadge();
   showToast('✅ ' + nome + ' adicionado!');
@@ -422,26 +739,22 @@ function add(nome, preco){
 }
 
 function remover(idx){
-  // remove item pelo índice e atualiza a tela
   pedido.splice(idx, 1);
   atualizarBadge();
   atualizarDrawer();
 }
 
 function calcTotal(){
-  // soma os preços de todos os itens do pedido
   return pedido.reduce((soma, item) => soma + item.preco, 0);
 }
 
 function atualizarBadge(){
-  // atualiza o contador de itens no botão do carrinho
   document.getElementById('badge').textContent = pedido.length;
 }
 
 function atualizarDrawer(){
   const lista = document.getElementById('listaPedido');
   if(pedido.length === 0){
-    // exibe mensagem de carrinho vazio
     lista.innerHTML = `<li class="carrinho-vazio"><span class="big">🍕</span>Seu pedido está vazio.<br>Adicione itens do cardápio!</li>`;
   } else {
     lista.innerHTML = '';
@@ -450,7 +763,7 @@ function atualizarDrawer(){
         <li>
           <div class="item-desc">
             ${item.nome}
-            ${item.tipo === 'pizza' ? `<small>${item.detalhe}</small>` : ''}
+            ${item.tipo !== 'outro' ? `<small>${item.detalhe}</small>` : ''}
           </div>
           <span style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
             R$ ${item.preco.toFixed(2).replace('.',',')}
@@ -459,7 +772,6 @@ function atualizarDrawer(){
         </li>`;
     });
   }
-  // atualiza o total exibido no rodapé do carrinho
   document.getElementById('total').textContent = 'R$ ' + calcTotal().toFixed(2).replace('.',',');
 }
 
@@ -480,13 +792,15 @@ function finalizarPedido(){
     showToast('⚠️ Adicione itens antes de finalizar!');
     return;
   }
-  // monta a mensagem de texto formatada para o WhatsApp
+  if(!estaAberto()){
+    showToast('🔒 Estamos fechados! Pedidos das 17h30 às 22h (fecha seg.)');
+    return;
+  }
   let msg = '🍕 *Pedido - Pai e Filho Pizzaria*%0A%0A';
   pedido.forEach(i => {
     msg += `• ${i.detalhe} — R$ ${i.preco.toFixed(2).replace('.',',')}%0A`;
   });
   msg += `%0A*Total: R$ ${calcTotal().toFixed(2).replace('.',',')}*`;
-  // abre o WhatsApp com a mensagem pré-preenchida
   window.open('https://wa.me/5583991664896?text=' + msg);
 }
 
@@ -494,6 +808,6 @@ function finalizarPedido(){
 function showToast(msg){
   const toast = document.getElementById('toast');
   toast.textContent = msg;
-  toast.classList.add('show');       // faz o toast aparecer
-  setTimeout(() => toast.classList.remove('show'), 2200); // some após 2,2 segundos
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
 }

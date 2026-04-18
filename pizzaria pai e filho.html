@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- BANNER DE HORÁRIO -->
+  <div id="horarioBanner" class="horario-banner"></div>
+
   <!-- CABEÇALHO -->
   <header>
     <div class="header-logo">
@@ -41,11 +45,16 @@
   <div class="info-banner">
     <span>📍 Entrega na região</span>
     <span>💬 Pedido via WhatsApp</span>
+    <span>🕐 Ter–Dom: 17h30–22h</span>
   </div>
 
   <!-- CATEGORIAS -->
   <h2 class="sec-title" id="sec-cat">O que você quer hoje?</h2>
   <div class="categorias">
+    <div class="cat-card" id="cat-combo" onclick="ativarCat('combo')">
+      <span class="cat-emoji">🎁</span>
+      Combos
+    </div>
     <div class="cat-card" id="cat-pizza" onclick="ativarCat('pizza')">
       <span class="cat-emoji">🍕</span>
       Pizzas
@@ -130,6 +139,38 @@
     </div>
   </div>
 
+  <!-- MODAL COMBO -->
+  <div class="modal-overlay" id="modalComboOverlay" onclick="fecharModalCombo()"></div>
+  <div id="modalCombo">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h2 id="modalComboTitulo">🎁 Montar Combo</h2>
+      <button class="fechar-btn" onclick="fecharModalCombo()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modalComboDescricao" class="combo-modal-desc"></div>
+
+      <!-- SELEÇÃO DE PIZZAS DO COMBO -->
+      <div id="comboPizzasContainer"></div>
+
+      <!-- BEBIDA DO COMBO (se aplicável) -->
+      <div id="comboBebidaContainer" style="display:none;">
+        <div class="modal-section">
+          <h3>Bebida incluída</h3>
+          <div id="comboBebidaOpcoes" class="borda-grid"></div>
+        </div>
+      </div>
+
+      <!-- RESUMO -->
+      <div class="modal-resumo" id="comboResumo">
+        <span id="comboResumoTexto">Monte seu combo</span>
+        <span id="comboPreco" style="font-size:1.2rem;color:var(--laranja2);font-family:'Playfair Display',serif;">R$ 45,00</span>
+      </div>
+
+      <button class="confirmar-btn" onclick="confirmarCombo()">✅ Adicionar Combo ao Pedido</button>
+    </div>
+  </div>
+
   <!-- FUNDO ESCURO DO CARRINHO -->
   <div class="overlay" id="overlay" onclick="fecharCarrinho()"></div>
 
@@ -165,6 +206,7 @@
   <footer>
     <p><strong>Pai e Filho Pizzaria</strong></p>
     <p style="margin-top:6px;">📱 (83) 9 9166-4896 &nbsp;•&nbsp; Pedidos via WhatsApp</p>
+    <p style="margin-top:4px; font-size:0.8rem; color:rgba(255,255,255,0.45);">🕐 Ter a Dom: 17h30–22h &nbsp;•&nbsp; Segunda: Fechado</p>
     <p style="margin-top:8px; font-size:0.75rem;">Feito com amor para uma pizza ainda melhor</p>
   </footer>
 

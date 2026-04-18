@@ -20,6 +20,48 @@
       overflow-x: hidden;
     }
 
+    /* ===== BANNER DE HORÁRIO ===== */
+    .horario-banner {
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.3s;
+    }
+    .horario-banner.aberto {
+      background: #1a7a3a;
+      color: #fff;
+    }
+    .horario-banner.pre-abertura {
+      background: #e67e22;
+      color: #fff;
+    }
+    .horario-banner.fechado {
+      background: #c0392b;
+      color: #fff;
+    }
+    .horario-banner.segunda {
+      background: #2c2c2c;
+      color: rgba(255,255,255,0.75);
+    }
+    .horario-banner .pulse {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      animation: piscar 1.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes piscar {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
     /* ===== CABEÇALHO ===== */
     header {
       background: var(--escuro);
@@ -53,7 +95,7 @@
       width: 160%;
       height: 160%;
       object-fit: cover;
-      object-position: 30% 5%; /* centraliza nos rostos */
+      object-position: 30% 5%;
       display: block;
       margin-left: -30%;
     }
@@ -115,7 +157,6 @@
       content: '';
       position: absolute;
       inset: 0;
-      /* brilho decorativo em laranja */
       background: radial-gradient(ellipse at 60% 40%, rgba(255,87,34,0.18) 0%, transparent 70%);
     }
     .hero-emoji {
@@ -124,7 +165,6 @@
       margin-bottom: 12px;
       animation: flutuar 3s ease-in-out infinite;
     }
-    /* animação de flutuação da pizza */
     @keyframes flutuar {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -198,7 +238,7 @@
     }
     .categorias {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       padding: 16px 20px;
       max-width: 680px;
@@ -214,7 +254,7 @@
       border: 2px solid transparent;
       transition: border 0.2s, transform 0.15s, box-shadow 0.2s;
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.85rem;
       color: var(--texto);
     }
     .cat-card:hover, .cat-card.ativo {
@@ -222,6 +262,16 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 28px rgba(255,87,34,0.18);
       color: var(--laranja2);
+    }
+    /* destaque especial para combos */
+    #cat-combo {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe8cc 100%);
+      border-color: var(--laranja);
+    }
+    #cat-combo:hover, #cat-combo.ativo {
+      background: var(--laranja2);
+      color: white;
+      border-color: var(--laranja2);
     }
     .cat-card .cat-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
 
@@ -231,11 +281,11 @@
       gap: 8px;
       padding: 0 20px 10px;
       overflow-x: auto;
-      scrollbar-width: none; /* oculta barra de rolagem no Firefox */
+      scrollbar-width: none;
       max-width: 680px;
       margin: 0 auto;
     }
-    .filtros::-webkit-scrollbar { display: none; } /* oculta barra de rolagem no Chrome/Safari */
+    .filtros::-webkit-scrollbar { display: none; }
     .filtro-btn {
       background: var(--creme2);
       border: 2px solid transparent;
@@ -273,7 +323,7 @@
       gap: 12px;
       box-shadow: var(--sombra);
       transition: box-shadow 0.2s, transform 0.15s;
-      animation: aparecer 0.3s ease both; /* animação de entrada */
+      animation: aparecer 0.3s ease both;
     }
     @keyframes aparecer {
       from { opacity:0; transform: translateY(12px); }
@@ -331,17 +381,135 @@
     }
     .item-add:hover { background: var(--vermelho); transform: scale(1.06); }
 
+    /* ===== CARDS DE COMBO ===== */
+    .combo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 12px 0 20px;
+    }
+    .combo-card {
+      background: var(--cartao);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      border: 2px solid transparent;
+      transition: border 0.2s, transform 0.15s, box-shadow 0.2s;
+      animation: aparecer 0.3s ease both;
+      display: flex;
+      flex-direction: column;
+    }
+    .combo-card:hover {
+      border-color: var(--laranja2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255,87,34,0.2);
+    }
+    .combo-img-wrapper {
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #3d1200 0%, #7a2500 100%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .combo-img-emoji {
+      font-size: 72px;
+      position: relative;
+      z-index: 1;
+    }
+    .combo-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(255,87,34,0.15) 0%, transparent 70%);
+    }
+    .combo-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--laranja2);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-family: 'Nunito', sans-serif;
+      z-index: 2;
+    }
+    .combo-body {
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .combo-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--escuro);
+      margin-bottom: 6px;
+    }
+    .combo-itens {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .combo-itens li {
+      font-size: 0.82rem;
+      color: #666;
+      font-weight: 600;
+      padding: 2px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .combo-itens li::before {
+      content: '✓';
+      color: var(--laranja2);
+      font-weight: 900;
+      font-size: 0.75rem;
+    }
+    .combo-preco-area {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .combo-preco {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--laranja2);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .combo-btn {
+      background: var(--laranja2);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 9px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .combo-btn:hover { background: var(--vermelho); transform: scale(1.04); }
+
     /* ===== MODAL MONTAR PIZZA ===== */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55); /* fundo escurecido */
+      background: rgba(0,0,0,0.55);
       z-index: 200;
     }
     .modal-overlay.aberto { display: block; }
 
-    #modalPizza {
+    #modalPizza, #modalCombo {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       background: white;
@@ -349,14 +517,13 @@
       max-height: 90vh;
       overflow-y: auto;
       z-index: 300;
-      transform: translateY(100%); /* começa fora da tela */
+      transform: translateY(100%);
       transition: transform 0.35s cubic-bezier(.4,0,.2,1);
       box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
     }
-    #modalPizza.aberto { transform: translateY(0); } /* desliza para cima */
+    #modalPizza.aberto, #modalCombo.aberto { transform: translateY(0); }
 
     .modal-handle {
-      /* alça visual para arrastar o modal */
       width: 44px; height: 5px;
       background: #ddd;
       border-radius: 4px;
@@ -456,7 +623,6 @@
       overflow-y: auto;
       padding-right: 4px;
     }
-    /* estilo da barra de rolagem dos sabores */
     .sabores-lista::-webkit-scrollbar { width: 4px; }
     .sabores-lista::-webkit-scrollbar-track { background: #f0ece8; border-radius: 4px; }
     .sabores-lista::-webkit-scrollbar-thumb { background: var(--laranja); border-radius: 4px; }
@@ -479,7 +645,7 @@
     }
     .sabor-item.desabilitado {
       opacity: 0.4;
-      cursor: not-allowed; /* cursor bloqueado quando máximo atingido */
+      cursor: not-allowed;
     }
     .sabor-nome {
       font-weight: 700;
@@ -494,7 +660,6 @@
       white-space: nowrap;
     }
     .sabor-check {
-      /* caixa de marcação do sabor */
       width: 20px; height: 20px;
       border: 2px solid #ddd;
       border-radius: 6px;
@@ -609,12 +774,46 @@
     }
     .confirmar-btn:hover { background: var(--vermelho); transform: scale(1.01); }
 
+    /* MODAL COMBO */
+    .combo-modal-desc {
+      margin-top: 16px;
+      background: var(--creme2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--texto);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .combo-pizza-slot {
+      margin-top: 20px;
+    }
+    .combo-pizza-slot h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--escuro);
+      margin-bottom: 6px;
+    }
+    .combo-pizza-selecionada {
+      font-size: 0.83rem;
+      color: var(--laranja2);
+      font-weight: 700;
+      margin-bottom: 8px;
+      min-height: 18px;
+    }
+    .combo-bebida-selecionada {
+      font-size: 0.83rem;
+      color: var(--laranja2);
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
     /* ===== GAVETA DO CARRINHO ===== */
     .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5); /* fundo semitransparente */
+      background: rgba(0,0,0,0.5);
       z-index: 200;
     }
     .overlay.aberto { display: block; }
@@ -628,14 +827,13 @@
       max-height: 85vh;
       overflow-y: auto;
       z-index: 300;
-      transform: translateY(100%); /* começa fora da tela */
+      transform: translateY(100%);
       transition: transform 0.35s cubic-bezier(.4,0,.2,1);
       box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
     }
-    #drawer.aberto { transform: translateY(0); } /* desliza para cima */
+    #drawer.aberto { transform: translateY(0); }
 
     .drawer-handle {
-      /* alça visual para arrastar a gaveta */
       width: 44px; height: 5px;
       background: #ddd;
       border-radius: 4px;
@@ -709,7 +907,7 @@
       justify-content: center;
       gap: 10px;
       margin: 10px 20px 0;
-      background: #25d366; /* verde do WhatsApp */
+      background: #25d366;
       color: white;
       border: none;
       border-radius: 14px;
@@ -738,7 +936,7 @@
       position: fixed;
       bottom: 24px;
       left: 50%;
-      transform: translateX(-50%) translateY(80px); /* começa escondido abaixo */
+      transform: translateX(-50%) translateY(80px);
       background: var(--escuro);
       color: white;
       padding: 12px 24px;
@@ -750,7 +948,7 @@
       white-space: nowrap;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    #toast.show { transform: translateX(-50%) translateY(0); } /* sobe para aparecer */
+    #toast.show { transform: translateX(-50%) translateY(0); }
 
     /* ===== RODAPÉ ===== */
     footer {
@@ -764,7 +962,10 @@
     footer strong { color: var(--laranja); }
 
     /* ===== RESPONSIVO (TELAS PEQUENAS) ===== */
-    @media (max-width: 400px) {
+    @media (max-width: 480px) {
       .hero h2 { font-size: 1.6rem; }
-      .categorias { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .categorias { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    }
+    @media (max-width: 340px) {
+      .categorias { grid-template-columns: repeat(2, 1fr); }
     }
