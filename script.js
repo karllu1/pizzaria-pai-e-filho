@@ -70,13 +70,13 @@ const COMBOS = [
     nome: 'Combo Família',
     emoji: '👨‍👩‍👧',
     badge: 'Para a família',
-    preco: 90,
+    preco: 80,
     descricaoItens: [
       '2 Pizzas Tradicionais G (à sua escolha)',
       'Coca-Cola 1,5L',
       'Entrega inclusa'
     ],
-    descricaoModal: '🍕 2 Pizzas Tradicionais G + 🥤 Coca-Cola 1,5L + 🛵 Entrega  — tudo por R$ 90,00',
+    descricaoModal: '🍕 2 Pizzas Tradicionais G + 🥤 Coca-Cola 1,5L + 🛵 Entrega  — tudo por R$ 80,00',
     pizzas: [
       { slot: '1ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
       { slot: '2ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
