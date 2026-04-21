@@ -92,7 +92,7 @@ const COMBOS = [
     preco: 55,
     descricaoItens: [
       '1 Pizza Tradicional G (salgada ou doce)',
-      '1 Pizza Tradicional P (salgada ou doce)',
+      '1 Pizza Tradicional P (doce)',
       'Entrega inclusa'
     ],
     descricaoModal: '🍕 1 Pizza Tradicional G + 🍕 1 Pizza Tradicional P + 🛵 Entrega  — tudo por R$ 55,00',
@@ -504,6 +504,7 @@ function confirmarPizza(){
 
   atualizarBadge();
   atualizarDrawer();
+  salvarPedidoStorage();
   fecharModal();
   showToast('🍕 Pizza adicionada ao pedido!');
 }
@@ -726,6 +727,7 @@ function confirmarCombo() {
 
   atualizarBadge();
   atualizarDrawer();
+  salvarPedidoStorage();
   fecharModalCombo();
   showToast('🎁 Combo adicionado ao pedido!');
 }
@@ -736,12 +738,14 @@ function add(nome, preco){
   atualizarBadge();
   showToast('✅ ' + nome + ' adicionado!');
   atualizarDrawer();
+  salvarPedidoStorage();
 }
 
 function remover(idx){
   pedido.splice(idx, 1);
   atualizarBadge();
   atualizarDrawer();
+  salvarPedidoStorage();
 }
 
 function calcTotal(){
@@ -787,21 +791,9 @@ function fecharCarrinho(){
 }
 
 // ===================== FINALIZAR PEDIDO =====================
-function finalizarPedido(){
-  if(pedido.length === 0){
-    showToast('⚠️ Adicione itens antes de finalizar!');
-    return;
-  }
-  if(!estaAberto()){
-    showToast('🔒 Estamos fechados! Pedidos das 17h30 às 22h (fecha seg.)');
-    return;
-  }
-  let msg = '🍕 *Pedido - Pai e Filho Pizzaria*%0A%0A';
-  pedido.forEach(i => {
-    msg += `• ${i.detalhe} — R$ ${i.preco.toFixed(2).replace('.',',')}%0A`;
-  });
-  msg += `%0A*Total: R$ ${calcTotal().toFixed(2).replace('.',',')}*`;
-  window.open('https://wa.me/5583991664896?text=' + msg);
+function abrirResumo() {
+  salvarPedidoStorage();
+  window.location.href = 'resumo.html';
 }
 
 // ===================== NOTIFICAÇÃO FLUTUANTE (TOAST) =====================
@@ -811,3 +803,33 @@ function showToast(msg){
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2200);
 }
+
+// ===== Persistência do pedido em storage =====
+function salvarPedidoStorage(){
+  try{
+    const json = JSON.stringify(pedido || []);
+    // salva em sessionStorage (principal) e localStorage como fallback
+    sessionStorage.setItem('pedido', json);
+    localStorage.setItem('pedido', json);
+  }catch(e){ console.warn('Falha ao salvar pedido:', e); }
+}
+
+function carregarPedidoDoStorage(){
+  try{
+    const stored = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
+    if(stored){
+      pedido = JSON.parse(stored) || [];
+    }
+  }catch(e){ pedido = []; }
+  atualizarBadge();
+  // se o drawer existir, atualiza visualmente
+  if(document.getElementById('listaPedido')) atualizarDrawer();
+}
+
+// Carrega pedido salvo ao abrir a página
+document.addEventListener('DOMContentLoaded', carregarPedidoDoStorage);
+
+// Garante salvar o pedido caso o usuário feche/saia da página
+window.addEventListener('beforeunload', function(){
+  salvarPedidoStorage();
+});

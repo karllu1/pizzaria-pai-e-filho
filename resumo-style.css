@@ -1,4 +1,71 @@
 :root {
+  --vermelho: #c0392b;
+  --laranja: #e67e22;
+  --laranja2: #ff5722;
+  --creme: #fff8f2;
+  --creme2: #ffeedd;
+  --escuro: #1a0a00;
+  --texto: #3d1f00;
+  --cartao: #ffffff;
+}
+
+/* Base */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--texto);-webkit-font-smoothing:antialiased}
+
+/* Container principal */
+.cliente-container{
+  max-width:760px;
+  margin:28px auto;
+  background:var(--cartao);
+  border-radius:14px;
+  padding:22px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+}
+
+.btn-voltar{
+  background:transparent;border:none;color:var(--escuro);font-weight:800;cursor:pointer;font-size:0.95rem;margin-bottom:8px
+}
+
+.cliente-header{padding:6px 0 14px;border-bottom:1px solid #f5eee8;margin-bottom:14px}
+.cliente-header h1{font-family:'Playfair Display',serif;color:var(--escuro);font-size:1.45rem;margin-bottom:6px}
+.cliente-header p{color:#7a5b45;font-weight:700}
+
+/* Resumo do pedido */
+.resumo-pedido{background:var(--creme2);padding:12px;border-radius:10px;margin-bottom:14px}
+.resumo-pedido h3{font-family:'Playfair Display',serif;color:var(--escuro);font-size:1rem;margin-bottom:8px}
+.resumo-itens{list-style:none;padding:0;margin:0;max-height:220px;overflow:auto}
+.resumo-itens li{padding:8px 6px;border-bottom:1px dashed rgba(0,0,0,0.04);font-weight:700;color:var(--texto)}
+.resumo-total{display:flex;justify-content:space-between;align-items:center;padding-top:8px;font-weight:800;color:var(--escuro)}
+#resumoTotal{color:var(--laranja2);font-family:'Playfair Display',serif}
+
+/* Formulário */
+form{margin-top:10px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;margin-bottom:6px;font-weight:800}
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #efe6df;background:white;font-weight:700}
+
+/* Tipo de entrega */
+.delivery-options{display:flex;gap:8px}
+.delivery-card{flex:1;background:var(--cartao);border-radius:12px;padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer;border:2px solid transparent;font-weight:800;justify-content:center}
+.delivery-card.ativo{background:var(--laranja2);color:white;border-color:var(--laranja2)}
+
+/* Botões */
+.btn-finalizar{display:flex;gap:10px;align-items:center;justify-content:center;width:100%;padding:14px;border-radius:12px;border:none;background:var(--laranja2);color:white;font-weight:900;cursor:pointer;margin-top:8px}
+.btn-finalizar span:first-child{font-size:1.15rem}
+
+/* Pequenos ajustes */
+#groupEndereco, #groupNumero, #groupReferencia{transition:opacity .18s}
+
+/* Responsivo */
+@media (max-width:520px){.cliente-container{margin:16px;padding:16px}.cliente-header h1{font-size:1.15rem}.resumo-itens li{font-size:0.95rem}}
+
+/* Pequeno utilitário de toast (reaproveitado) */
+#toast{position:fixed;left:50%;transform:translateX(-50%) translateY(80px);bottom:24px;background:var(--escuro);color:#fff;padding:10px 18px;border-radius:40px;font-weight:800;display:none}
+#toast.show{display:block;transform:translateX(-50%) translateY(0)}
+    :root {
       --vermelho: #c0392b;
       --laranja: #e67e22;
       --laranja2: #ff5722;
@@ -6,7 +73,7 @@
       --creme2: #ffeedd;
       --escuro: #1a0a00;
       --texto: #3d1f00;
-      --cartao: #ffffff;
+      --card: #ffffff;
       --sombra: 0 4px 24px rgba(192,57,43,0.10);
     }
 
@@ -20,52 +87,10 @@
       overflow-x: hidden;
     }
 
-    /* ===== BANNER DE HORÁRIO ===== */
-    .horario-banner {
-      padding: 10px 20px;
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      font-family: 'Nunito', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.3s;
-    }
-    .horario-banner.aberto {
-      background: #1a7a3a;
-      color: #fff;
-    }
-    .horario-banner.pre-abertura {
-      background: #e67e22;
-      color: #fff;
-    }
-    .horario-banner.fechado {
-      background: #c0392b;
-      color: #fff;
-    }
-    .horario-banner.segunda {
-      background: #2c2c2c;
-      color: rgba(255,255,255,0.75);
-    }
-    .horario-banner .pulse {
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #fff;
-      animation: piscar 1.2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-    @keyframes piscar {
-      0%,100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-
-    /* ===== CABEÇALHO ===== */
+    /* ===== HEADER ===== */
     header {
       background: var(--escuro);
-      padding: 14px 24px;
+      padding: 18px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -74,50 +99,35 @@
       z-index: 100;
       box-shadow: 0 2px 16px rgba(0,0,0,0.35);
     }
-
     .header-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
-
     .logo-circle {
-      width: 58px;
-      height: 58px;
+      width: 52px; height: 52px;
       border-radius: 50%;
-      overflow: hidden;
+      background: linear-gradient(135deg, var(--laranja2), var(--vermelho));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 0 0 3px rgba(255,87,34,0.3);
       flex-shrink: 0;
-      border: 2px solid var(--laranja);
-      box-shadow: 0 0 0 3px rgba(255,87,34,0.25);
     }
-
-    .logo-circle img {
-      width: 160%;
-      height: 160%;
-      object-fit: cover;
-      object-position: 30% 5%;
-      display: block;
-      margin-left: -30%;
-    }
-
     .header-title {
       font-family: 'Playfair Display', serif;
       color: #fff;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       line-height: 1.1;
     }
-
     .header-title span {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-family: 'Nunito', sans-serif;
       color: var(--laranja);
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       font-weight: 700;
-      margin-top: 2px;
     }
-
     .carrinho-btn {
       background: var(--laranja2);
       border: none;
@@ -145,7 +155,7 @@
       font-weight: 900;
     }
 
-    /* ===== DESTAQUE / BANNER PRINCIPAL ===== */
+    /* ===== HERO ===== */
     .hero {
       background: linear-gradient(135deg, #1a0a00 0%, #3d1200 60%, #7a2500 100%);
       padding: 52px 24px 44px;
@@ -163,9 +173,9 @@
       font-size: 64px;
       display: block;
       margin-bottom: 12px;
-      animation: flutuar 3s ease-in-out infinite;
+      animation: float 3s ease-in-out infinite;
     }
-    @keyframes flutuar {
+    @keyframes float {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
@@ -214,7 +224,7 @@
     }
     .hero-btn.outline:hover { background: rgba(255,255,255,0.1); }
 
-    /* ===== FAIXA DE INFORMAÇÕES ===== */
+    /* ===== INFO BANNER ===== */
     .info-banner {
       background: var(--laranja2);
       color: white;
@@ -238,14 +248,14 @@
     }
     .categorias {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       padding: 16px 20px;
       max-width: 680px;
       margin: 0 auto;
     }
     .cat-card {
-      background: var(--cartao);
+      background: var(--card);
       border-radius: 16px;
       padding: 20px 10px 16px;
       text-align: center;
@@ -254,7 +264,7 @@
       border: 2px solid transparent;
       transition: border 0.2s, transform 0.15s, box-shadow 0.2s;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.92rem;
       color: var(--texto);
     }
     .cat-card:hover, .cat-card.ativo {
@@ -262,16 +272,6 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 28px rgba(255,87,34,0.18);
       color: var(--laranja2);
-    }
-    /* destaque especial para combos */
-    #cat-combo {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe8cc 100%);
-      border-color: var(--laranja);
-    }
-    #cat-combo:hover, #cat-combo.ativo {
-      background: var(--laranja2);
-      color: white;
-      border-color: var(--laranja2);
     }
     .cat-card .cat-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
 
@@ -313,7 +313,7 @@
       margin: 0 auto;
     }
     .item {
-      background: var(--cartao);
+      background: var(--card);
       border-radius: 14px;
       padding: 16px;
       margin-top: 10px;
@@ -323,9 +323,9 @@
       gap: 12px;
       box-shadow: var(--sombra);
       transition: box-shadow 0.2s, transform 0.15s;
-      animation: aparecer 0.3s ease both;
+      animation: fadeUp 0.3s ease both;
     }
-    @keyframes aparecer {
+    @keyframes fadeUp {
       from { opacity:0; transform: translateY(12px); }
       to   { opacity:1; transform: translateY(0); }
     }
@@ -381,124 +381,6 @@
     }
     .item-add:hover { background: var(--vermelho); transform: scale(1.06); }
 
-    /* ===== CARDS DE COMBO ===== */
-    .combo-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 12px 0 20px;
-    }
-    .combo-card {
-      background: var(--cartao);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: var(--sombra);
-      border: 2px solid transparent;
-      transition: border 0.2s, transform 0.15s, box-shadow 0.2s;
-      animation: aparecer 0.3s ease both;
-      display: flex;
-      flex-direction: column;
-    }
-    .combo-card:hover {
-      border-color: var(--laranja2);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255,87,34,0.2);
-    }
-    .combo-img-wrapper {
-      width: 100%;
-      height: 160px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #3d1200 0%, #7a2500 100%);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .combo-img-emoji {
-      font-size: 72px;
-      position: relative;
-      z-index: 1;
-    }
-    .combo-img-overlay {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(255,87,34,0.15) 0%, transparent 70%);
-    }
-    .combo-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: var(--laranja2);
-      color: white;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
-      z-index: 2;
-    }
-    .combo-body {
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-    .combo-info h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--escuro);
-      margin-bottom: 6px;
-    }
-    .combo-itens {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .combo-itens li {
-      font-size: 0.82rem;
-      color: #666;
-      font-weight: 600;
-      padding: 2px 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .combo-itens li::before {
-      content: '✓';
-      color: var(--laranja2);
-      font-weight: 900;
-      font-size: 0.75rem;
-    }
-    .combo-preco-area {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .combo-preco {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--laranja2);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .combo-btn {
-      background: var(--laranja2);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 9px 18px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.82rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .combo-btn:hover { background: var(--vermelho); transform: scale(1.04); }
-
     /* ===== MODAL MONTAR PIZZA ===== */
     .modal-overlay {
       display: none;
@@ -509,7 +391,7 @@
     }
     .modal-overlay.aberto { display: block; }
 
-    #modalPizza, #modalCombo {
+    #modalPizza {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       background: white;
@@ -521,7 +403,7 @@
       transition: transform 0.35s cubic-bezier(.4,0,.2,1);
       box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
     }
-    #modalPizza.aberto, #modalCombo.aberto { transform: translateY(0); }
+    #modalPizza.aberto { transform: translateY(0); }
 
     .modal-handle {
       width: 44px; height: 5px;
@@ -574,7 +456,7 @@
       font-weight: 600;
     }
 
-    /* SELEÇÃO DE TAMANHO */
+    /* TAMANHO */
     .tam-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -607,7 +489,7 @@
     }
     .tam-btn.ativo span { color: rgba(255,255,255,0.8); }
 
-    /* LISTA DE SABORES */
+    /* SABORES */
     .sabores-info {
       font-size: 0.83rem;
       color: var(--laranja2);
@@ -674,41 +556,7 @@
       color: white;
     }
 
-    /* ADICIONAIS */
-    .adicionais-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .adicional-btn {
-      background: white;
-      border: 2px solid #ddd;
-      color: var(--texto);
-      border-radius: 50px;
-      padding: 7px 14px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .adicional-btn .adicional-preco {
-      font-size: 0.72rem;
-      color: #aaa;
-      font-weight: 600;
-    }
-    .adicional-btn:hover { border-color: var(--laranja); }
-    .adicional-btn.selecionado {
-      background: var(--laranja2);
-      color: white;
-      border-color: var(--laranja2);
-    }
-    .adicional-btn.selecionado .adicional-preco { color: rgba(255,255,255,0.8); }
-
-    /* SELEÇÃO DE BORDA */
+    /* BORDA */
     .borda-grid {
       display: flex;
       flex-wrap: wrap;
@@ -738,7 +586,7 @@
       font-weight: 700;
     }
 
-    /* RESUMO E BOTÃO DE CONFIRMAR */
+    /* RESUMO E CONFIRMAR */
     .modal-resumo {
       background: var(--creme2);
       border-radius: 12px;
@@ -774,41 +622,7 @@
     }
     .confirmar-btn:hover { background: var(--vermelho); transform: scale(1.01); }
 
-    /* MODAL COMBO */
-    .combo-modal-desc {
-      margin-top: 16px;
-      background: var(--creme2);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 0.85rem;
-      color: var(--texto);
-      font-weight: 600;
-      line-height: 1.5;
-    }
-    .combo-pizza-slot {
-      margin-top: 20px;
-    }
-    .combo-pizza-slot h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--escuro);
-      margin-bottom: 6px;
-    }
-    .combo-pizza-selecionada {
-      font-size: 0.83rem;
-      color: var(--laranja2);
-      font-weight: 700;
-      margin-bottom: 8px;
-      min-height: 18px;
-    }
-    .combo-bebida-selecionada {
-      font-size: 0.83rem;
-      color: var(--laranja2);
-      font-weight: 700;
-      margin-top: 8px;
-    }
-
-    /* ===== GAVETA DO CARRINHO ===== */
+    /* ===== CARRINHO DRAWER ===== */
     .overlay {
       display: none;
       position: fixed;
@@ -907,7 +721,7 @@
       justify-content: center;
       gap: 10px;
       margin: 10px 20px 0;
-      background: var(--laranja2);
+      background: #ff6c17;
       color: white;
       border: none;
       border-radius: 14px;
@@ -918,9 +732,9 @@
       cursor: pointer;
       width: calc(100% - 40px);
       transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 4px 16px rgba(133, 55, 3, 0.3)
+      box-shadow: 0 4px 16px rgba(168, 69, 3, 0.3);
     }
-    .wpp-btn:hover { background: rgb(153, 64, 4); transform: scale(1.02); }
+    .wpp-btn:hover { background: #9c4003; transform: scale(1.02); }
     .wpp-btn svg { width: 22px; height: 22px; fill: white; }
 
     .carrinho-vazio {
@@ -931,7 +745,7 @@
     }
     .carrinho-vazio .big { font-size: 3rem; display: block; margin-bottom: 10px; }
 
-    /* ===== NOTIFICAÇÃO FLUTUANTE (TOAST) ===== */
+    /* ===== TOAST ===== */
     #toast {
       position: fixed;
       bottom: 24px;
@@ -950,7 +764,7 @@
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ===== RODAPÉ ===== */
+    /* ===== FOOTER ===== */
     footer {
       background: var(--escuro);
       color: rgba(255,255,255,0.6);
@@ -961,11 +775,8 @@
     }
     footer strong { color: var(--laranja); }
 
-    /* ===== RESPONSIVO (TELAS PEQUENAS) ===== */
-    @media (max-width: 480px) {
+    /* RESPONSIVO */
+    @media (max-width: 400px) {
       .hero h2 { font-size: 1.6rem; }
-      .categorias { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    }
-    @media (max-width: 340px) {
-      .categorias { grid-template-columns: repeat(2, 1fr); }
+      .categorias { grid-template-columns: repeat(3, 1fr); gap: 8px; }
     }

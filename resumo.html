@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados do Cliente - Pai e Filho Pizzaria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="resumo-style.css">
+  </head>
+<body>
+    <div class="cliente-container">
+      <button class="btn-voltar" onclick="voltarCardapio()">← Voltar</button>
+
+      <div class="cliente-header">
+        <h1>🍕 Suas Informações</h1>
+        <p>Complete os dados para finalizar seu pedido</p>
+      </div>
+
+      <!-- RESUMO DO PEDIDO -->
+      <div class="resumo-pedido">
+        <h3>📋 Seu Pedido</h3>
+        <ul class="resumo-itens" id="resumoItens">
+          <li>Carregando...</li>
+        </ul>
+        <div class="resumo-total">
+          <span>Total:</span>
+          <span id="resumoTotal">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <form id="formularioCliente" onsubmit="finalizarPedidoWhatsApp(event)">
+
+        <!-- NOME -->
+        <div class="form-group">
+          <label for="nome">👤 Seu Nome</label>
+          <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+        </div>
+
+        <!-- TIPO DE ENTREGA -->
+        <div class="form-group">
+          <label>🚗 Tipo de Entrega</label>
+          <div class="delivery-options">
+            <div class="delivery-card ativo">
+              <span>🚚</span>
+              <p>Entrega</p>
+            </div>
+          </div>
+          <input type="hidden" id="tipoEntrega" name="tipoEntrega" value="entrega">
+        </div>
+
+        <!-- ENDEREÇO -->
+        <div class="form-group" id="groupEndereco">
+          <label for="endereco">📍 Endereço (Rua)</label>
+          <input type="text" id="endereco" name="endereco" placeholder="Rua, avenida, travessa etc.">
+        </div>
+
+        <div class="form-group" id="groupNumero">
+          <label for="numero"># Número da casa</label>
+          <input type="text" id="numero" name="numero" placeholder="Número da residência">
+        </div>
+
+        <div class="form-group" id="groupReferencia">
+          <label for="referencia">📌 Ponto de referência (opcional)</label>
+          <input type="text" id="referencia" name="referencia" placeholder="Ex: em frente à padaria X, perto do mercado Y">
+        </div>
+
+        <div id="toast">✅ Item adicionado!</div>
+
+        <!-- FORMA DE PAGAMENTO -->
+        <div class="form-group">
+          <label for="pagamento">💳 Forma de Pagamento</label>
+          <select id="pagamento" name="pagamento" required onchange="onPagamentoChange(this.value)">
+            <option value="">Selecione a forma de pagamento</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Débito">Débito</option>
+            <option value="Crédito">Crédito</option>
+            <option value="Pix">Pix</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="groupTroco" style="display:none">
+          <label for="troco">💵 Quanto você dará? (ex: 50,00)</label>
+          <input type="text" id="troco" name="troco" placeholder="Ex: 50,00">
+        </div>
+
+        <!-- TELEFONE (OPCIONAL) -->
+        <div class="form-group">
+          <label for="telefone">📞 Telefone (opcional)</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(83) 9 9999-9999">
+        </div>
+
+        <!-- BOTÃO FINALIZAR -->
+        <button type="submit" class="btn-finalizar" onclick="">
+          <span>💬</span>
+          <span>Enviar no WhatsApp</span>
+        </button>
+      </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="cliente.js"></script>
+    <script>
+      // Carregar dados do pedido quando a página for carregada
+      document.addEventListener('DOMContentLoaded', carregarPedidoNaTelaCliente);
+    </script>
+</body>
+</html>
