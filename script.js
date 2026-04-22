@@ -99,7 +99,7 @@ const COMBOS = [
     descricaoModal: '🍕 1 Pizza Tradicional G + 🍕 1 Pizza Tradicional P + 🛵 Entrega  — tudo por R$ 55,00',
     pizzas: [
       { slot: 'Pizza Grande (sabores até 2)', tamanho: 'G', qtd: 1 },
-      { slot: 'Pizza Pequena (sabores até 2)', tamanho: 'P', qtd: 1 },
+      { slot: 'Pizza Pequena (apenas 1 sabor doce)', tamanho: 'P', qtd: 1 },
     ],
     bebidas: [],
     temEscolhaBebida: false,
@@ -571,10 +571,15 @@ function abrirModalCombo(comboId) {
   const container = document.getElementById('comboPizzasContainer');
   container.innerHTML = '';
   comboAtual.pizzas.forEach((pizza, idx) => {
+    // Define o hint de sabores conforme o slot
+    const hintSabores = (comboAtual.id === 'doce' && idx === 1)
+      ? 'Escolha 1 sabor doce'
+      : 'Escolha até 2 sabores tradicionais';
+
     container.innerHTML += `
       <div class="combo-pizza-slot">
         <div class="modal-section">
-          <h3>${pizza.slot} <span class="hint">(Tamanho ${pizza.tamanho}) • Escolha até 2 sabores tradicionais</span></h3>
+          <h3>${pizza.slot} <span class="hint">(Tamanho ${pizza.tamanho}) • ${hintSabores}</span></h3>
           <p class="combo-pizza-selecionada" id="comboSaborInfo${idx}">Nenhum sabor selecionado</p>
           <div class="sabores-lista" id="comboSaboresLista${idx}" style="max-height:180px;"></div>
         </div>
@@ -656,6 +661,10 @@ function renderizarSaboresCombo(slotIdx) {
 function toggleSaborCombo(slotIdx, nome, precoP, precoG) {
   const selecionados = comboSabores[slotIdx];
   const idx = selecionados.findIndex(s => s.nome === nome);
+
+  // No combo doce, a pizza P (slot 1) aceita apenas 1 sabor
+  const maxSabores = (comboAtual?.id === 'doce' && slotIdx === 1) ? 1 : 2;
+
   if (idx >= 0) {
     if (selecionados.length === 1) {
       showToast('⚠️ Selecione pelo menos 1 sabor!');
@@ -663,8 +672,10 @@ function toggleSaborCombo(slotIdx, nome, precoP, precoG) {
     }
     selecionados.splice(idx, 1);
   } else {
-    if (selecionados.length >= 2) {
-      showToast('⚠️ Máximo 2 sabores por pizza!');
+    if (selecionados.length >= maxSabores) {
+      showToast(maxSabores === 1
+        ? '⚠️ A pizza pequena aceita apenas 1 sabor!'
+        : '⚠️ Máximo 2 sabores por pizza!');
       return;
     }
     selecionados.push({ nome, p: precoP, g: precoG });
@@ -809,7 +820,6 @@ function showToast(msg){
 function salvarPedidoStorage(){
   try{
     const json = JSON.stringify(pedido || []);
-    // salva em sessionStorage (principal) e localStorage como fallback
     sessionStorage.setItem('pedido', json);
     localStorage.setItem('pedido', json);
   }catch(e){ console.warn('Falha ao salvar pedido:', e); }
@@ -823,7 +833,6 @@ function carregarPedidoDoStorage(){
     }
   }catch(e){ pedido = []; }
   atualizarBadge();
-  // se o drawer existir, atualiza visualmente
   if(document.getElementById('listaPedido')) atualizarDrawer();
 }
 
