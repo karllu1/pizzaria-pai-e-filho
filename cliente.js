@@ -21,7 +21,6 @@ function carregarPedidoNaTelaCliente() {
 }
 
 function selecionarTipoEntrega(tipo, elemento) {
-  // No resumo removeremos a opção retirada, aqui mantemos compatibilidade
   document.querySelectorAll('.delivery-card').forEach(c => c.classList.remove('ativo'));
   if (elemento) elemento.classList.add('ativo');
   document.getElementById('tipoEntrega').value = tipo || 'entrega';
@@ -49,7 +48,11 @@ function selecionarTipoEntrega(tipo, elemento) {
 function onPagamentoChange(valor){
   const group = document.getElementById('groupTroco');
   const trocoInput = document.getElementById('troco');
+  const taxaInfo = document.getElementById('taxa-info');
+  const resumoTotal = document.getElementById('resumoTotal');
+
   if(!group || !trocoInput) return;
+
   if(valor === 'Dinheiro'){
     group.style.display = 'block';
     trocoInput.setAttribute('required','');
@@ -58,6 +61,39 @@ function onPagamentoChange(valor){
     trocoInput.removeAttribute('required');
     trocoInput.value = '';
   }
+
+  // Recalculate subtotal from stored pedido (avoid reading resumoTotal which may already contain a fee)
+  const pedidoJSON = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
+  const pedidoLocal = pedidoJSON ? JSON.parse(pedidoJSON) : [];
+  const subtotal = pedidoLocal.reduce((s, i) => s + (i.preco || 0), 0);
+
+  // If card payment, compute per-pizza fee: R$1.00 for G, R$0.50 for others
+  let taxaTotal = 0;
+  if (valor === 'Débito' || valor === 'Crédito') {
+    if (taxaInfo) {
+      taxaInfo.textContent = 'Taxa adicional para pagamento no cartão: R$ 0,50 por pizza P, R$ 1,00 por pizza G.';
+      taxaInfo.style.display = 'block';
+    }
+
+    for (const item of pedidoLocal) {
+      const nome = (item.nome || '').toString();
+      const detalhe = (item.detalhe || '').toString();
+      if (nome.includes('(G)') || detalhe.includes('Pizza G') || nome.includes(' G')) {
+        taxaTotal += 1.00;
+      } else {
+        taxaTotal += 0.50;
+      }
+    }
+  } else {
+    if (taxaInfo) {
+      taxaInfo.style.display = 'none';
+      taxaInfo.textContent = '';
+    }
+    taxaTotal = 0;
+  }
+
+  const totalComTaxa = subtotal + taxaTotal;
+  if (resumoTotal) resumoTotal.textContent = 'R$ ' + totalComTaxa.toFixed(2).replace('.', ',');
 }
 
 // Volta ao cardápio
@@ -118,13 +154,11 @@ function finalizarPedidoWhatsApp(event) {
   msg += `Nome: ${nome}\n`;
   if (telefone) msg += `Telefone: ${telefone}\n`;
 
-  msg += '\nENTREGA / RETIRADA\n';
+  msg += '\nENTREGA\n';
   if (tipoEntrega === 'entrega') {
     msg += `Tipo: Entrega\n`;
     msg += `Endereço: ${endereco}, Nº ${numeroCasa}\n`;
     if (referencia) msg += `Ponto de referência: ${referencia}\n`;
-  } else {
-    msg += `Tipo: Retirada\n`;
   }
 
   msg += '\nPAGAMENTO\n';
@@ -137,20 +171,23 @@ function finalizarPedidoWhatsApp(event) {
 
   // Calcula total e aplica taxa para cartão se necessário
   let subtotal = pedidoLocal.reduce((s, i) => s + i.preco, 0);
-  let taxa = 0;
-  if(pagamento === 'Débito' || pagamento === 'Crédito'){
-    // se houver alguma pizza G, taxa = 1.00, caso contrário 0.50
-    const temG = pedidoLocal.some(i => (i.detalhe && i.detalhe.includes('G')) || (i.nome && i.nome.includes('(G)')) || (i.detalhe && i.detalhe.includes('Pizza G')));
+  // Compute per-pizza fee for card payments
+  let taxaTotal = 0;
+  if (pagamento === 'Débito' || pagamento === 'Crédito') {
     for (const item of pedidoLocal) {
-      console.log(item)
+      const nomeItem = (item.nome || '').toString();
+      const detalheItem = (item.detalhe || '').toString();
+      if (nomeItem.includes('(G)') || detalheItem.includes('Pizza G') || nomeItem.includes(' G')) {
+        taxaTotal += 1.00;
+      } else {
+        taxaTotal += 0.50;
+      }
     }
-    taxa = temG ? 1.00 : 0.50;
+    if (taxaTotal > 0) {
+      msg += `\nTaxa por pagamento no cartão: R$ ${taxaTotal.toFixed(2).replace('.',',')}\n`;
+    }
   }
-  const totalComTaxa = subtotal + taxa;
-
-  if(taxa > 0){
-    msg += `\nTaxa por pagamento no cartão: R$ ${taxa.toFixed(2).replace('.',',')}\n`;
-  }
+  const totalComTaxa = subtotal + taxaTotal;
 
   // Dinheiro: valida troco informado
   if(pagamento === 'Dinheiro'){
@@ -175,7 +212,7 @@ function finalizarPedidoWhatsApp(event) {
     msg += `\nTOTAL: R$ ${totalComTaxa.toFixed(2).replace('.', ',')}\n`;
   }
 
-  msg += `\n✅ Confirme seu pedido no WhatsApp`;
+  msg += `\nConfirme seu pedido no WhatsApp`;
   
   try { localStorage.removeItem('pedido'); } catch(e) {}
   try { sessionStorage.removeItem('pedido'); } catch(e) {}

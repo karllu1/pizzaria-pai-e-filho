@@ -804,6 +804,11 @@ function fecharCarrinho(){
 
 // ===================== FINALIZAR PEDIDO =====================
 function abrirResumo() {
+  if (pedido.length === 0) {
+    showToast('⚠️ Seu pedido está vazio!');
+    return;
+  }
+
   salvarPedidoStorage();
   window.location.href = 'resumo.html';
 }

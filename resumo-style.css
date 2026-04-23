@@ -11,7 +11,8 @@
 
 /* Base */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--texto);-webkit-font-smoothing:antialiased}
+body{      font-family: Arial, Helvetica, sans-serif;
+background:var(--creme);color:var(--texto);-webkit-font-smoothing:antialiased}
 
 /* Container principal */
 .cliente-container{

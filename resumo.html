@@ -22,6 +22,9 @@
         <ul class="resumo-itens" id="resumoItens">
           <li>Carregando...</li>
         </ul>
+        <div>
+          <span id="taxa-info" style="display:none;" ></span>
+        </div>
         <div class="resumo-total">
           <span>Total:</span>
           <span id="resumoTotal">R$ 0,00</span>
@@ -71,7 +74,7 @@
         <div class="form-group">
           <label for="pagamento">💳 Forma de Pagamento</label>
           <select id="pagamento" name="pagamento" required onchange="onPagamentoChange(this.value)">
-            <option value="">Selecione a forma de pagamento</option>
+            <option value="" disabled selected>Selecione a forma de pagamento</option>
             <option value="Dinheiro">Dinheiro</option>
             <option value="Débito">Débito</option>
             <option value="Crédito">Crédito</option>
