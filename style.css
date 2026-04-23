@@ -26,7 +26,7 @@
       text-align: center;
       font-size: 0.85rem;
       font-weight: 700;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,7 +101,7 @@
     }
 
     .header-title {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: #fff;
       font-size: 1.3rem;
       line-height: 1.1;
@@ -110,7 +110,7 @@
     .header-title span {
       display: block;
       font-size: 0.7rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: var(--laranja);
       letter-spacing: 3px;
       text-transform: uppercase;
@@ -124,7 +124,7 @@
       color: white;
       border-radius: 50px;
       padding: 10px 20px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -170,7 +170,7 @@
       50% { transform: translateY(-10px); }
     }
     .hero h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 2.1rem;
       color: #fff;
       line-height: 1.15;
@@ -200,7 +200,7 @@
       border: none;
       border-radius: 50px;
       padding: 13px 28px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -230,7 +230,7 @@
 
     /* ===== CATEGORIAS ===== */
     .sec-title {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.5rem;
       color: var(--escuro);
       padding: 32px 20px 0;
@@ -291,7 +291,7 @@
       border: 2px solid transparent;
       border-radius: 50px;
       padding: 7px 18px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
@@ -356,7 +356,7 @@
       padding: 3px 10px;
       cursor: pointer;
       border: 2px solid transparent;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       transition: all 0.15s;
     }
     .preco-tag:hover {
@@ -371,7 +371,7 @@
       border: none;
       border-radius: 50px;
       padding: 9px 18px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.85rem;
       cursor: pointer;
@@ -434,7 +434,7 @@
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       z-index: 2;
     }
     .combo-body {
@@ -445,7 +445,7 @@
       gap: 12px;
     }
     .combo-info h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.1rem;
       color: var(--escuro);
       margin-bottom: 6px;
@@ -478,7 +478,7 @@
       flex-shrink: 0;
     }
     .combo-preco {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.4rem;
       color: var(--laranja2);
       font-weight: 700;
@@ -490,7 +490,7 @@
       border: none;
       border-radius: 50px;
       padding: 9px 18px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
@@ -541,7 +541,7 @@
       z-index: 1;
     }
     .modal-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.2rem;
       color: var(--escuro);
     }
@@ -559,7 +559,7 @@
       margin-top: 20px;
     }
     .modal-section h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1rem;
       color: var(--escuro);
       margin-bottom: 10px;
@@ -568,7 +568,7 @@
       gap: 8px;
     }
     .hint {
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 0.75rem;
       color: #aaa;
       font-weight: 600;
@@ -586,7 +586,7 @@
       border-radius: 14px;
       padding: 14px 10px;
       text-align: center;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -686,7 +686,7 @@
       color: var(--texto);
       border-radius: 50px;
       padding: 7px 14px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.8rem;
       cursor: pointer;
@@ -720,7 +720,7 @@
       color: var(--texto);
       border-radius: 50px;
       padding: 8px 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
@@ -754,7 +754,7 @@
     #modalPreco {
       font-size: 1.2rem;
       color: var(--laranja2);
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
     .confirmar-btn {
       display: block;
@@ -764,7 +764,7 @@
       border: none;
       border-radius: 14px;
       padding: 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -789,7 +789,7 @@
       margin-top: 20px;
     }
     .combo-pizza-slot h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1rem;
       color: var(--escuro);
       margin-bottom: 6px;
@@ -847,7 +847,7 @@
       border-bottom: 1px solid #f0ece8;
     }
     .drawer-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.25rem;
       color: var(--escuro);
     }
@@ -897,7 +897,7 @@
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--escuro);
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
     .drawer-total span:last-child { color: var(--laranja2); font-size: 1.3rem; }
 
@@ -912,7 +912,7 @@
       border: none;
       border-radius: 14px;
       padding: 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1.05rem;
       cursor: pointer;

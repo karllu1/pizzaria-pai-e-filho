@@ -4,7 +4,7 @@ const itens = [
   { nome:"Mussarela",         desc:"Molho de tomate, mussarela e orégano.",                                                              p:25, g:35, cat:"pizza", sub:"tradicionais" },
   { nome:"Calabresa",         desc:"Molho de tomate, mussarela, calabresa e orégano.",                                                   p:25, g:35, cat:"pizza", sub:"tradicionais" },
   { nome:"4 Queijos",         desc:"Molho de tomate, mussarela, tomate, requeijão, parmesão, provolone e orégano.",                      p:25, g:35, cat:"pizza", sub:"tradicionais" },
-  { nome:"frango cremoso",    desc:"Molho de tomate, mussarela, frango, requeijão e orégano.",                                           p:25, g:35, cat:"pizza", sub:"tradicionais" },
+  { nome:"Frango Cremoso",    desc:"Molho de tomate, mussarela, frango, requeijão e orégano.",                                           p:25, g:35, cat:"pizza", sub:"tradicionais" },
   { nome:"Marguerita",        desc:"Molho de tomate, mussarela, tomate, manjericão e orégano.",                                          p:25, g:35, cat:"pizza", sub:"tradicionais" },
   { nome:"Mista",             desc:"Molho de tomate, mussarela, presunto e orégano.",                                                    p:25, g:35, cat:"pizza", sub:"tradicionais" },
   { nome:"Mista 2",           desc:"Molho de tomate, mussarela, presunto, calabresa e orégano.",                                         p:25, g:35, cat:"pizza", sub:"tradicionais" },

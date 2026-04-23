@@ -29,16 +29,16 @@ background:var(--creme);color:var(--texto);-webkit-font-smoothing:antialiased}
 }
 
 .cliente-header{padding:6px 0 14px;border-bottom:1px solid #f5eee8;margin-bottom:14px}
-.cliente-header h1{font-family:'Playfair Display',serif;color:var(--escuro);font-size:1.45rem;margin-bottom:6px}
+.cliente-header h1{font-family: Arial, Helvetica, sans-serif;color:var(--escuro);font-size:1.45rem;margin-bottom:6px}
 .cliente-header p{color:#7a5b45;font-weight:700}
 
 /* Resumo do pedido */
 .resumo-pedido{background:var(--creme2);padding:12px;border-radius:10px;margin-bottom:14px}
-.resumo-pedido h3{font-family:'Playfair Display',serif;color:var(--escuro);font-size:1rem;margin-bottom:8px}
+.resumo-pedido h3{font-family: Arial, Helvetica, sans-serif;color:var(--escuro);font-size:1rem;margin-bottom:8px}
 .resumo-itens{list-style:none;padding:0;margin:0;max-height:220px;overflow:auto}
 .resumo-itens li{padding:8px 6px;border-bottom:1px dashed rgba(0,0,0,0.04);font-weight:700;color:var(--texto)}
 .resumo-total{display:flex;justify-content:space-between;align-items:center;padding-top:8px;font-weight:800;color:var(--escuro)}
-#resumoTotal{color:var(--laranja2);font-family:'Playfair Display',serif}
+#resumoTotal{color:var(--laranja2);font-family: Arial, Helvetica, sans-serif}
 
 /* Formulário */
 form{margin-top:10px}
@@ -83,7 +83,7 @@ form{margin-top:10px}
     body {
       background: var(--creme);
       color: var(--texto);
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -115,7 +115,7 @@ form{margin-top:10px}
       flex-shrink: 0;
     }
     .header-title {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: #fff;
       font-size: 1.4rem;
       line-height: 1.1;
@@ -123,7 +123,7 @@ form{margin-top:10px}
     .header-title span {
       display: block;
       font-size: 0.72rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: var(--laranja);
       letter-spacing: 2px;
       text-transform: uppercase;
@@ -135,7 +135,7 @@ form{margin-top:10px}
       color: white;
       border-radius: 50px;
       padding: 10px 20px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -181,7 +181,7 @@ form{margin-top:10px}
       50% { transform: translateY(-10px); }
     }
     .hero h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 2.1rem;
       color: #fff;
       line-height: 1.15;
@@ -211,7 +211,7 @@ form{margin-top:10px}
       border: none;
       border-radius: 50px;
       padding: 13px 28px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -241,7 +241,7 @@ form{margin-top:10px}
 
     /* ===== CATEGORIAS ===== */
     .sec-title {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.5rem;
       color: var(--escuro);
       padding: 32px 20px 0;
@@ -292,7 +292,7 @@ form{margin-top:10px}
       border: 2px solid transparent;
       border-radius: 50px;
       padding: 7px 18px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
@@ -357,7 +357,7 @@ form{margin-top:10px}
       padding: 3px 10px;
       cursor: pointer;
       border: 2px solid transparent;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       transition: all 0.15s;
     }
     .preco-tag:hover {
@@ -372,7 +372,7 @@ form{margin-top:10px}
       border: none;
       border-radius: 50px;
       padding: 9px 18px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.85rem;
       cursor: pointer;
@@ -424,7 +424,7 @@ form{margin-top:10px}
       z-index: 1;
     }
     .modal-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.2rem;
       color: var(--escuro);
     }
@@ -442,7 +442,7 @@ form{margin-top:10px}
       margin-top: 20px;
     }
     .modal-section h3 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1rem;
       color: var(--escuro);
       margin-bottom: 10px;
@@ -451,7 +451,7 @@ form{margin-top:10px}
       gap: 8px;
     }
     .hint {
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 0.75rem;
       color: #aaa;
       font-weight: 600;
@@ -469,7 +469,7 @@ form{margin-top:10px}
       border-radius: 14px;
       padding: 14px 10px;
       text-align: center;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -569,7 +569,7 @@ form{margin-top:10px}
       color: var(--texto);
       border-radius: 50px;
       padding: 8px 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
@@ -603,7 +603,7 @@ form{margin-top:10px}
     #modalPreco {
       font-size: 1.2rem;
       color: var(--laranja2);
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
     .confirmar-btn {
       display: block;
@@ -613,7 +613,7 @@ form{margin-top:10px}
       border: none;
       border-radius: 14px;
       padding: 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -662,7 +662,7 @@ form{margin-top:10px}
       border-bottom: 1px solid #f0ece8;
     }
     .drawer-header h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 1.25rem;
       color: var(--escuro);
     }
@@ -712,7 +712,7 @@ form{margin-top:10px}
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--escuro);
-      font-family: 'Playfair Display', serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
     .drawer-total span:last-child { color: var(--laranja2); font-size: 1.3rem; }
 
@@ -727,7 +727,7 @@ form{margin-top:10px}
       border: none;
       border-radius: 14px;
       padding: 16px;
-      font-family: 'Nunito', sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: 700;
       font-size: 1.05rem;
       cursor: pointer;
