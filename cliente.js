@@ -99,7 +99,7 @@ function onPagamentoChange(valor){
 // Volta ao cardápio
 function voltarCardapio() {
   sessionStorage.removeItem('pedido');
-  window.location.href = 'cardapio.html';
+  window.location.href = 'resumo.html';
 }
 
 // Finaliza o pedido e envia para WhatsApp com formatação bonita
