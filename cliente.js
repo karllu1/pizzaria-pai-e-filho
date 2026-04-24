@@ -166,7 +166,11 @@ function finalizarPedidoWhatsApp(event) {
 
   msg += '\nSEU PEDIDO\n';
   pedidoLocal.forEach((item) => {
-    msg += `- ${item.nome} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+    if (item.tipo === 'combo' && item.detalhe) {
+      msg += `- ${item.nome}\n   ${item.detalhe} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+    } else {
+      msg += `- ${item.nome} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+    }
   });
 
   // Calcula total e aplica taxa para cartão se necessário
@@ -217,7 +221,7 @@ function finalizarPedidoWhatsApp(event) {
   try { localStorage.removeItem('pedido'); } catch(e) {}
   try { sessionStorage.removeItem('pedido'); } catch(e) {}
 
-  const numeroWhatsApp = '5583986388769';
+  const numeroWhatsApp = '5583991664896';
   const encoded = encodeURIComponent(msg);
   const url = `https://wa.me/${numeroWhatsApp}?text=${encoded}`;
 
