@@ -211,7 +211,7 @@ function estaAberto() {
   const diaSemana = agora.getDay();
   if (diaSemana === 1) return false;
   const totalMinutos = agora.getHours() * 60 + agora.getMinutes();
-  return totalMinutos >= (17 * 60 + 30) && totalMinutos < (22 * 60 + 30);
+  return totalMinutos >= ABERTURA && totalMinutos < FECHAMENTO;
 }
 
 // Chama ao carregar e atualiza a cada 30 segundos
