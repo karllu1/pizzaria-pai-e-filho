@@ -152,7 +152,7 @@ function verificarHorario() {
 
   const PRE_ABERTURA   = 17 * 60 + 15; // 17:15
   const ABERTURA       = 17 * 60 + 30; // 17:30
-  const FECHAMENTO     = 22 * 60;       // 22:00
+  const FECHAMENTO     = 22 * 60 + 30; // 22:30
 
   const banner = document.getElementById('horarioBanner');
 
@@ -205,13 +205,13 @@ function verificarHorario() {
   banner.innerHTML = `🔒 Fechado no momento — ${proximaAbertura}`;
 }
 
-// Retorna true se está no horário de atendimento (17:30–22:00, exceto segunda)
+// Retorna true se está no horário de atendimento (17:30–22:30, exceto segunda)
 function estaAberto() {
   const agora = new Date();
   const diaSemana = agora.getDay();
   if (diaSemana === 1) return false;
   const totalMinutos = agora.getHours() * 60 + agora.getMinutes();
-  return totalMinutos >= (17 * 60 + 30) && totalMinutos < (22 * 60);
+  return totalMinutos >= (17 * 60 + 30) && totalMinutos < (22 * 60 + 30);
 }
 
 // Chama ao carregar e atualiza a cada 30 segundos
