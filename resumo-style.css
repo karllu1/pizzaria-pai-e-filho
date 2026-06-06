@@ -781,3 +781,324 @@ form{margin-top:10px}
       .hero h2 { font-size: 1.6rem; }
       .categorias { grid-template-columns: repeat(3, 1fr); gap: 8px; }
     }
+
+    /* ===== TEMA SAO JOAO - FINALIZACAO ===== */
+    :root {
+      --vermelho: #b82626;
+      --laranja: #f08a1a;
+      --laranja2: #e95821;
+      --creme: #fff5df;
+      --creme2: #ffe7b8;
+      --escuro: #2a1207;
+      --texto: #42220d;
+      --cartao: #fffdf7;
+      --amarelo-junino: #ffc533;
+      --verde-junino: #1f8a52;
+      --azul-junino: #1c75bc;
+      --sombra: 0 16px 34px rgba(89, 34, 5, 0.13);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 18px 18px, rgba(184,38,38,0.08) 0 2px, transparent 3px),
+        linear-gradient(90deg, rgba(31,138,82,0.05) 1px, transparent 1px),
+        linear-gradient(#fff7e7, #fff1d1);
+      background-size: 42px 42px, 84px 84px, auto;
+      color: var(--texto);
+    }
+
+    .festa-junina-top {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      height: 24px;
+      background: #f8d470;
+      box-shadow: inset 0 -2px 0 rgba(42,18,7,0.1);
+      overflow: hidden;
+    }
+
+    .festa-junina-top span {
+      width: 100%;
+      height: 24px;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .festa-junina-top span:nth-child(1),
+    .festa-junina-top span:nth-child(5) { background: var(--vermelho); }
+    .festa-junina-top span:nth-child(2),
+    .festa-junina-top span:nth-child(6) { background: var(--amarelo-junino); }
+    .festa-junina-top span:nth-child(3) { background: var(--verde-junino); }
+    .festa-junina-top span:nth-child(4) { background: var(--azul-junino); }
+
+    .cliente-container {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,248,230,0.98));
+      border: 1px solid rgba(184,38,38,0.14);
+      border-top: 6px solid var(--amarelo-junino);
+      box-shadow: 0 18px 42px rgba(89,34,5,0.16);
+    }
+
+    .arraia-badge {
+      display: inline-flex;
+      background: var(--amarelo-junino);
+      color: var(--escuro);
+      border-radius: 999px;
+      padding: 7px 14px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.74rem;
+      letter-spacing: 0.06em;
+      box-shadow: 0 8px 16px rgba(42,18,7,0.12);
+    }
+
+    .cliente-header {
+      border-bottom-color: rgba(184,38,38,0.14);
+    }
+
+    .cliente-header h1 {
+      color: var(--escuro);
+      text-shadow: 0 2px 0 rgba(255,197,51,0.38);
+    }
+
+    .cliente-header p {
+      color: #704022;
+    }
+
+    .cliente-header small {
+      display: block;
+      color: #8a5630;
+      font-weight: 800;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .btn-voltar {
+      background: #fff8e9;
+      border: 1px solid rgba(184,38,38,0.16);
+      color: var(--escuro);
+      box-shadow: 0 8px 16px rgba(89,34,5,0.08);
+    }
+
+    .resumo-pedido,
+    .form-group {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(240,138,26,0.22);
+      border-bottom: 4px solid rgba(240,138,26,0.36);
+      border-radius: 12px;
+    }
+
+    .resumo-pedido h3,
+    label {
+      color: var(--escuro);
+    }
+
+    input,
+    select {
+      border-color: rgba(184,38,38,0.18);
+      background: #fffdf7;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--verde-junino);
+      box-shadow: 0 0 0 3px rgba(31,138,82,0.16);
+    }
+
+    .delivery-card.ativo {
+      background: linear-gradient(135deg, rgba(31,138,82,0.14), rgba(255,197,51,0.22));
+      border-color: var(--verde-junino);
+    }
+
+    #resumoTotal,
+    .resumo-total span:last-child {
+      color: var(--vermelho);
+    }
+
+    .btn-finalizar,
+    .wpp-btn {
+      background: linear-gradient(135deg, var(--vermelho), var(--laranja2));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 12px 24px rgba(184,38,38,0.24);
+    }
+
+    .btn-finalizar:hover,
+    .wpp-btn:hover {
+      background: linear-gradient(135deg, #8f1d1d, #d64a16);
+    }
+
+    /* ===== AJUSTE JUNINO MAIS TERROSO ===== */
+    :root {
+      --vermelho: #8f241c;
+      --laranja: #b95f22;
+      --laranja2: #a9471d;
+      --creme: #f7ead2;
+      --creme2: #ecd2a6;
+      --escuro: #241105;
+      --texto: #3a2110;
+      --cartao: #fff9ed;
+      --amarelo-junino: #d69a2d;
+      --verde-junino: #526f38;
+      --azul-junino: #355f72;
+      --sombra: 0 14px 30px rgba(54, 24, 8, 0.16);
+    }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(80, 48, 20, 0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(80, 48, 20, 0.035) 1px, transparent 1px),
+        linear-gradient(#f8ecd6, #efd7ae);
+      background-size: 36px 36px, 36px 36px, auto;
+    }
+
+    .festa-junina-top {
+      display: none;
+    }
+
+    .arraia-badge {
+      background: #efd6a3;
+      border: 1px solid rgba(80, 38, 13, 0.24);
+      white-space: nowrap;
+      box-shadow: 0 8px 18px rgba(37,17,5,0.12);
+    }
+
+    .cliente-container {
+      border-top-color: #b77a25;
+      box-shadow: 0 18px 42px rgba(54,24,8,0.16);
+    }
+
+    .btn-finalizar,
+    .wpp-btn {
+      background: linear-gradient(135deg, #8f241c, #a9471d);
+      box-shadow: 0 12px 24px rgba(54,24,8,0.2);
+    }
+
+    /* ===== TEMAS AUTOMATICOS - FINALIZACAO ===== */
+    html.tema-normal {
+      --vermelho: #c0392b;
+      --laranja: #e67e22;
+      --laranja2: #ff5722;
+      --creme: #fff8f2;
+      --creme2: #ffeedd;
+      --escuro: #1a0a00;
+      --texto: #3d1f00;
+      --cartao: #ffffff;
+      --sombra: 0 4px 24px rgba(192,57,43,0.10);
+    }
+
+    html.tema-normal body {
+      background: var(--creme);
+    }
+
+    html.tema-normal .festa-junina-top,
+    html.tema-normal .arraia-badge {
+      display: none;
+    }
+
+    html.tema-normal .cliente-container {
+      background: white;
+      border: 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    html.tema-sao-joao {
+      --vermelho: #8f241c;
+      --laranja: #b95f22;
+      --laranja2: #a9471d;
+      --creme: #f7ead2;
+      --creme2: #ecd2a6;
+      --escuro: #241105;
+      --texto: #3a2110;
+      --cartao: #fff9ed;
+      --amarelo-junino: #d69a2d;
+      --verde-junino: #526f38;
+      --azul-junino: #355f72;
+      --sombra: 0 14px 30px rgba(54, 24, 8, 0.16);
+    }
+
+    html.tema-natal {
+      --vermelho: #8f1f1f;
+      --laranja: #b88938;
+      --laranja2: #9f2d25;
+      --creme: #f8f1e7;
+      --creme2: #efe1c8;
+      --escuro: #20120c;
+      --texto: #342015;
+      --cartao: #fffaf2;
+      --amarelo-junino: #c49a48;
+      --verde-junino: #355b3a;
+      --azul-junino: #355b3a;
+      --sombra: 0 14px 30px rgba(48, 18, 12, 0.14);
+    }
+
+    html.tema-pascoa {
+      --vermelho: #8d4f32;
+      --laranja: #b87345;
+      --laranja2: #9c5b35;
+      --creme: #fff4ea;
+      --creme2: #ead8c8;
+      --escuro: #2d1b12;
+      --texto: #3c281d;
+      --cartao: #fffaf6;
+      --amarelo-junino: #c8a06a;
+      --verde-junino: #6f7d52;
+      --azul-junino: #8b6f8e;
+      --sombra: 0 14px 30px rgba(65, 34, 18, 0.12);
+    }
+
+    html.tema-namorados {
+      --vermelho: #9c2433;
+      --laranja: #b76558;
+      --laranja2: #a72e3f;
+      --creme: #fff1ef;
+      --creme2: #f0cbc8;
+      --escuro: #271015;
+      --texto: #3f1c22;
+      --cartao: #fffafa;
+      --amarelo-junino: #c88b8b;
+      --verde-junino: #7a4b55;
+      --azul-junino: #7a4b55;
+      --sombra: 0 14px 30px rgba(80, 20, 30, 0.12);
+    }
+
+    html.tema-natal body,
+    html.tema-pascoa body,
+    html.tema-namorados body {
+      background:
+        linear-gradient(90deg, rgba(60, 32, 16, 0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(60, 32, 16, 0.035) 1px, transparent 1px),
+        var(--creme);
+      background-size: 38px 38px, 38px 38px, auto;
+    }
+
+    html.tema-natal .festa-junina-top,
+    html.tema-pascoa .festa-junina-top,
+    html.tema-namorados .festa-junina-top {
+      display: none;
+    }
+
+    html.tema-natal .arraia-badge,
+    html.tema-pascoa .arraia-badge,
+    html.tema-namorados .arraia-badge {
+      display: inline-flex;
+      white-space: nowrap;
+      background: #fff7e8;
+      border: 1px solid rgba(60, 32, 16, 0.2);
+      color: var(--escuro);
+      box-shadow: 0 8px 18px rgba(37,17,5,0.12);
+    }
+
+    html.tema-natal .cliente-container,
+    html.tema-pascoa .cliente-container,
+    html.tema-namorados .cliente-container {
+      border-top-color: var(--amarelo-junino);
+    }
+
+    html.tema-natal .btn-finalizar,
+    html.tema-natal .wpp-btn,
+    html.tema-pascoa .btn-finalizar,
+    html.tema-pascoa .wpp-btn,
+    html.tema-namorados .btn-finalizar,
+    html.tema-namorados .wpp-btn {
+      background: linear-gradient(135deg, var(--vermelho), var(--laranja2));
+      box-shadow: 0 12px 24px rgba(54,24,8,0.16);
+    }

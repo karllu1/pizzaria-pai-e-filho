@@ -6,12 +6,16 @@
   <title>Pai e Filho Pizzaria</title>
   <link rel="icon" href="logo_pizzaria.jpeg" type="image/jpeg">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css">
+  <script src="temas.js?v=20260606-temas"></script>
+  <link rel="stylesheet" href="style.css?v=20260606-temas">
 </head>
 <body>
 
   <!-- BANNER DE HORÁRIO -->
   <div id="horarioBanner" class="horario-banner"></div>
+  <div class="festa-junina-top" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
 
   <!-- CABEÇALHO -->
   <header>
@@ -33,9 +37,10 @@
 
   <!-- DESTAQUE / BANNER PRINCIPAL -->
   <section class="hero">
+    <span class="arraia-badge">Arraiá Pai e Filho</span>
     <span class="hero-emoji">🍕</span>
     <h2>A pizza que une <em>gerações</em></h2>
-    <p>Monte seu pedido com até 2 sabores e borda recheada</p>
+    <p>São João paraibano com pizza quentinha, combos, doces e borda recheada</p>
     <div class="hero-btns">
       <button class="hero-btn" onclick="irParaCategorias()">Ver cardápio completo</button>
       <button class="hero-btn outline" onclick="abrirCarrinho()">🛒 Meu pedido</button>
@@ -46,6 +51,7 @@
   <div class="info-banner">
     <span>📍 Entrega na região</span>
     <span>💬 Pedido via WhatsApp</span>
+    <span id="temaInfo">🍕 Pizza quentinha</span>
     <span>🕐 Ter–Dom: 17h30–22h30</span>
   </div>
 
@@ -207,6 +213,6 @@
     <p style="margin-top:8px; font-size:0.75rem;">Feito com amor para uma pizza ainda melhor.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260606-temas"></script>
 </body>
 </html>

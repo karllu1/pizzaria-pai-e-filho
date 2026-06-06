@@ -96,10 +96,15 @@ function onPagamentoChange(valor){
   if (resumoTotal) resumoTotal.textContent = 'R$ ' + totalComTaxa.toFixed(2).replace('.', ',');
 }
 
+function urlComTemaTeste(destino) {
+  const temaTeste = new URLSearchParams(window.location.search).get('tema');
+  return temaTeste ? `${destino}?tema=${encodeURIComponent(temaTeste)}` : destino;
+}
+
 // Volta ao cardápio
 function voltarCardapio() {
   sessionStorage.removeItem('pedido');
-  window.location.href = 'resumo.html';
+  window.location.href = urlComTemaTeste('index.html');
 }
 
 // Finaliza o pedido e envia para WhatsApp com formatação bonita
@@ -111,7 +116,7 @@ function finalizarPedidoWhatsApp(event) {
 
   if(!estaAberto()){
     showToast('🔒 Estamos fechados! Pedidos das 17h30 às 22h (fecha seg.)');
-    setTimeout(() => { window.location.href = 'index.html'; }, 4000);
+    setTimeout(() => { window.location.href = urlComTemaTeste('index.html'); }, 4000);
     return;
   }
 
@@ -233,5 +238,5 @@ function finalizarPedidoWhatsApp(event) {
   try { sessionStorage.removeItem('pedido'); } catch(e) {}
 
   // Redireciona para a tela principal do cardápio (evita ficar travado no resumo)
-  setTimeout(() => { window.location.href = 'index.html'; }, 400);
+  setTimeout(() => { window.location.href = urlComTemaTeste('index.html'); }, 400);
 }

@@ -40,6 +40,7 @@ const itens = [
   { nome:"Banana Condensada", desc:"Mussarela, banana, canela e leite condensado.",                     p:20, g:35, cat:"doce", sub:"tradicionais" },
   { nome:"Coquinho",          desc:"Mussarela, brigadeiro e coco ralado.",                              p:25, g:35, cat:"doce", sub:"tradicionais" },
   { nome:"Doce de Leite",     desc:"Mussarela e doce de leite.",                                        p:25, g:35, cat:"doce", sub:"tradicionais" },
+  { nome:"Paçoca",            desc:"Mussarela, brigadeiro e paçoca.",                                   p:25, g:35, cat:"doce", sub:"tradicionais" },
   // ⭐ PIZZAS DOCES ESPECIAIS
   { nome:"Banana Nevada",     desc:"Mussarela, banana e chocolate branco.",                             p:30, g:40, cat:"doce", sub:"especiais" },
   { nome:"Banoffe",           desc:"Mussarela, banana, doce de leite, amendoim e chocolate branco.",    p:30, g:40, cat:"doce", sub:"especiais" },
@@ -78,13 +79,13 @@ const COMBOS = [
     nome: 'Combo Família',
     emoji: '👨‍👩‍👧',
     badge: 'Para a família',
-    preco: 80,
+    preco: 80.90,
     descricaoItens: [
       '2 Pizzas Tradicionais G (à sua escolha)',
       'Coca-Cola 1,5L',
       'Entrega inclusa'
     ],
-    descricaoModal: '🍕 2 Pizzas Tradicionais G + 🥤 Coca-Cola 1,5L + 🛵 Entrega  — tudo por R$ 80,00',
+    descricaoModal: '🍕 2 Pizzas Tradicionais G + 🥤 Coca-Cola 1,5L + 🛵 Entrega  — tudo por R$ 80,90',
     pizzas: [
       { slot: '1ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
       { slot: '2ª Pizza (sabores até 2)', tamanho: 'G', qtd: 1 },
@@ -139,6 +140,10 @@ const BORDA_PRECOS = {
   'Chocolate ao Leite':  { P: 5,  G: 9  },
 };
 
+const HORARIO_PRE_ABERTURA = 17 * 60 + 15; // 17:15
+const HORARIO_ABERTURA = 17 * 60 + 30;     // 17:30
+const HORARIO_FECHAMENTO = 22 * 60 + 30;   // 22:30
+
 // ===================== HORÁRIO DE FUNCIONAMENTO =====================
 // Segunda: fechado
 // Terça a Domingo: pedidos a partir 17:15, funciona 17:30–22:00
@@ -150,11 +155,8 @@ function verificarHorario() {
   const minuto = agora.getMinutes();
   const totalMinutos = hora * 60 + minuto;
 
-  const PRE_ABERTURA   = 17 * 60 + 15; // 17:15
-  const ABERTURA       = 17 * 60 + 30; // 17:30
-  const FECHAMENTO     = 22 * 60 + 30; // 22:30
-
   const banner = document.getElementById('horarioBanner');
+  if (!banner) return;
 
   if (diaSemana === 1) {
     // Segunda-feira: fechado
@@ -163,17 +165,17 @@ function verificarHorario() {
     return;
   }
 
-  if (totalMinutos >= PRE_ABERTURA && totalMinutos < ABERTURA) {
+  if (totalMinutos >= HORARIO_PRE_ABERTURA && totalMinutos < HORARIO_ABERTURA) {
     // Pré-abertura: pode fazer pedido mas ainda não está servindo
-    const minRestantes = ABERTURA - totalMinutos;
+    const minRestantes = HORARIO_ABERTURA - totalMinutos;
     banner.className = 'horario-banner pre-abertura';
     banner.innerHTML = `<span class="pulse"></span> Abrimos em ${minRestantes} min! Já pode montar seu pedido 🍕`;
     return;
   }
 
-  if (totalMinutos >= ABERTURA && totalMinutos < FECHAMENTO) {
+  if (totalMinutos >= HORARIO_ABERTURA && totalMinutos < HORARIO_FECHAMENTO) {
     // Aberto!
-    const minParaFechar = FECHAMENTO - totalMinutos;
+    const minParaFechar = HORARIO_FECHAMENTO - totalMinutos;
     const hFechar = Math.floor(minParaFechar / 60);
     const mFechar = minParaFechar % 60;
     let textoFecha = '';
@@ -187,7 +189,7 @@ function verificarHorario() {
   // Fora do horário
   const diasNomes = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
   let proximaAbertura = '';
-  const aindaAbreHoje = totalMinutos < ABERTURA; // antes das 17h30, ainda abre hoje
+  const aindaAbreHoje = totalMinutos < HORARIO_ABERTURA; // antes das 17h30, ainda abre hoje
 
   if (aindaAbreHoje) {
     // Ainda vai abrir hoje
@@ -211,7 +213,7 @@ function estaAberto() {
   const diaSemana = agora.getDay();
   if (diaSemana === 1) return false;
   const totalMinutos = agora.getHours() * 60 + agora.getMinutes();
-  return totalMinutos >= ABERTURA && totalMinutos < FECHAMENTO;
+  return totalMinutos >= HORARIO_ABERTURA && totalMinutos < HORARIO_FECHAMENTO;
 }
 
 // Chama ao carregar e atualiza a cada 30 segundos
@@ -312,11 +314,21 @@ function renderizar(cat, sub){
 // ===================== RENDERIZAR COMBOS =====================
 function renderizarCombos(){
   const cardapio = document.getElementById('cardapio');
+  const formatarReais = valor => valor.toFixed(2).replace('.', ',');
+  const comboVisual = {
+    tradicional: '1 pizza G + refri',
+    familia: '2 pizzas G + refri',
+    doce: 'G + P doce'
+  };
   cardapio.innerHTML = `<div class="combo-grid">` + COMBOS.map((combo, idx) => `
-    <div class="combo-card" style="animation-delay:${idx*0.1}s">
+    <div class="combo-card combo-${combo.id}" style="animation-delay:${idx*0.1}s">
       <div class="combo-img-wrapper">
         <div class="combo-img-overlay"></div>
-        <span class="combo-img-emoji">${combo.emoji}</span>
+        <div class="combo-illustration" aria-hidden="true">
+          <span class="combo-ticket">${comboVisual[combo.id]}</span>
+          <span class="combo-pizza-mark"></span>
+          <span class="combo-flag-row"><i></i><i></i><i></i><i></i></span>
+        </div>
         <span class="combo-badge">${combo.badge}</span>
       </div>
       <div class="combo-body">
@@ -327,7 +339,7 @@ function renderizarCombos(){
           </ul>
         </div>
         <div class="combo-preco-area">
-          <div class="combo-preco">R$ ${combo.preco},00</div>
+          <div class="combo-preco">R$ ${formatarReais(combo.preco)}</div>
           <button class="combo-btn" onclick="abrirModalCombo('${combo.id}')">Montar</button>
         </div>
       </div>
@@ -772,11 +784,13 @@ function calcTotal(){
 }
 
 function atualizarBadge(){
-  document.getElementById('badge').textContent = pedido.length;
+  const badge = document.getElementById('badge');
+  if (badge) badge.textContent = pedido.length;
 }
 
 function atualizarDrawer(){
   const lista = document.getElementById('listaPedido');
+  if (!lista) return;
   if(pedido.length === 0){
     lista.innerHTML = `<li class="carrinho-vazio"><span class="big">🍕</span>Seu pedido está vazio.<br>Adicione itens do cardápio!</li>`;
   } else {
@@ -817,7 +831,8 @@ function abrirResumo() {
   }
 
   salvarPedidoStorage();
-  window.location.href = 'resumo.html';
+  const temaTeste = new URLSearchParams(window.location.search).get('tema');
+  window.location.href = temaTeste ? `resumo.html?tema=${encodeURIComponent(temaTeste)}` : 'resumo.html';
 }
 
 // ===================== NOTIFICAÇÃO FLUTUANTE (TOAST) =====================

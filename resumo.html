@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dados do Cliente - Pai e Filho Pizzaria</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="resumo-style.css">
+    <script src="temas.js?v=20260606-temas"></script>
+    <link rel="stylesheet" href="resumo-style.css?v=20260606-temas">
   </head>
 <body>
+    <div class="festa-junina-top" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
     <div class="cliente-container">
       <button class="btn-voltar" onclick="voltarCardapio()">← Voltar</button>
 
       <div class="cliente-header">
+        <span class="arraia-badge">Arraiá Pai e Filho</span>
         <h1>🍕 Suas Informações</h1>
-        <p>Complete os dados para finalizar seu pedido</p>
+        <p>Complete os dados para finalizar seu pedido no clima do São João paraibano</p>
       </div>
 
       <!-- RESUMO DO PEDIDO -->
@@ -101,8 +106,8 @@
       </form>
     </div>
 
-    <script src="script.js"></script>
-    <script src="cliente.js"></script>
+    <script src="script.js?v=20260606-temas"></script>
+    <script src="cliente.js?v=20260606-temas"></script>
     <script>
       // Carregar dados do pedido quando a página for carregada
       document.addEventListener('DOMContentLoaded', carregarPedidoNaTelaCliente);
