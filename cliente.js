@@ -80,8 +80,10 @@ function onPagamentoChange(valor){
       const detalhe = (item.detalhe || '').toString();
       if (nome.includes('(G)') || detalhe.includes('Pizza G') || nome.includes(' G')) {
         taxaTotal += 1.00;
-      } else {
+      } if (nome.includes('(P)') || detalhe.includes('Pizza P') || nome.includes(' P')) {
         taxaTotal += 0.50;
+      } else {
+        continue;
       }
     }
   } else {
@@ -187,9 +189,12 @@ function finalizarPedidoWhatsApp(event) {
       const nomeItem = (item.nome || '').toString();
       const detalheItem = (item.detalhe || '').toString();
       if (nomeItem.includes('(G)') || detalheItem.includes('Pizza G') || nomeItem.includes(' G')) {
+        console.log(nomeItem);
         taxaTotal += 1.00;
-      } else {
+      } if (nomeItem.includes('(P)') || detalheItem.includes('Pizza P') || nomeItem.includes(' P')) {
         taxaTotal += 0.50;
+      } else {
+        continue;
       }
     }
     if (taxaTotal > 0) {
