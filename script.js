@@ -37,7 +37,7 @@ const itens = [
   { nome:"Camarão Especial",  desc:"Molho de tomate, mussarela, camarão, milho verde, cebola, ovos, requeijão e orégano.",               p:35, g:45, cat:"pizza", sub:"especiais" },           
   // 🍫 PIZZAS DOCES TRADICIONAIS
   { nome:"Brigadeiro",        desc:"Mussarela, brigadeiro e granulado.",                                p:25, g:35, cat:"doce", sub:"tradicionais" },
-  { nome:"Banana Condensada", desc:"Mussarela, banana, canela e leite condensado.",                     p:20, g:35, cat:"doce", sub:"tradicionais" },
+  { nome:"Banana Condensada", desc:"Mussarela, banana, canela e leite condensado.",                     p:25, g:35, cat:"doce", sub:"tradicionais" },
   { nome:"Coquinho",          desc:"Mussarela, brigadeiro e coco ralado.",                              p:25, g:35, cat:"doce", sub:"tradicionais" },
   { nome:"Doce de Leite",     desc:"Mussarela e doce de leite.",                                        p:25, g:35, cat:"doce", sub:"tradicionais" },
   { nome:"Paçoca",            desc:"Mussarela, brigadeiro e paçoca.",                                   p:25, g:35, cat:"doce", sub:"tradicionais" },
@@ -139,6 +139,10 @@ const BORDA_PRECOS = {
   'Chocolate Branco':    { P: 5,  G: 9  },
   'Chocolate ao Leite':  { P: 5,  G: 9  },
 };
+
+function formatarMoeda(valor) {
+  return Number(valor || 0).toFixed(2).replace('.', ',');
+}
 
 const HORARIO_PRE_ABERTURA = 17 * 60 + 15; // 17:15
 const HORARIO_ABERTURA = 17 * 60 + 30;     // 17:30
@@ -292,7 +296,7 @@ function renderizar(cat, sub){
             <small>Bebida gelada</small>
           </div>
           <button class="item-add" onclick="add('${item.nome}', ${item.preco})">
-            R$ ${item.preco},00
+            R$ ${formatarMoeda(item.preco)}
           </button>
         </div>`;
     } else {
@@ -314,7 +318,6 @@ function renderizar(cat, sub){
 // ===================== RENDERIZAR COMBOS =====================
 function renderizarCombos(){
   const cardapio = document.getElementById('cardapio');
-  const formatarReais = valor => valor.toFixed(2).replace('.', ',');
   const comboVisual = {
     tradicional: '1 pizza G + refri',
     familia: '2 pizzas G + refri',
@@ -339,7 +342,7 @@ function renderizarCombos(){
           </ul>
         </div>
         <div class="combo-preco-area">
-          <div class="combo-preco">R$ ${formatarReais(combo.preco)}</div>
+          <div class="combo-preco">R$ ${formatarMoeda(combo.preco)}</div>
           <button class="combo-btn" onclick="abrirModalCombo('${combo.id}')">Montar</button>
         </div>
       </div>
@@ -725,7 +728,7 @@ function atualizarResumoCombo() {
     textoEl.textContent = pizzasTexto + bebidaTexto;
   }
 
-  document.getElementById('comboPreco').textContent = `R$ ${comboAtual.preco},00`;
+  document.getElementById('comboPreco').textContent = `R$ ${formatarMoeda(comboAtual.preco)}`;
 }
 
 function confirmarCombo() {
@@ -780,7 +783,7 @@ function remover(idx){
 }
 
 function calcTotal(){
-  return pedido.reduce((soma, item) => soma + item.preco, 0);
+  return pedido.reduce((soma, item) => soma + (Number(item.preco) || 0), 0);
 }
 
 function atualizarBadge(){
@@ -796,6 +799,7 @@ function atualizarDrawer(){
   } else {
     lista.innerHTML = '';
     pedido.forEach((item, idx) => {
+      const preco = Number(item.preco) || 0;
       lista.innerHTML += `
         <li>
           <div class="item-desc">
@@ -803,7 +807,7 @@ function atualizarDrawer(){
             ${item.tipo !== 'outro' ? `<small>${item.detalhe}</small>` : ''}
           </div>
           <span style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-            R$ ${item.preco.toFixed(2).replace('.',',')}
+            R$ ${formatarMoeda(preco)}
             <button class="remover" onclick="remover(${idx})">✕</button>
           </span>
         </li>`;
@@ -856,7 +860,8 @@ function carregarPedidoDoStorage(){
   try{
     const stored = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
     if(stored){
-      pedido = JSON.parse(stored) || [];
+      const pedidoSalvo = JSON.parse(stored);
+      pedido = Array.isArray(pedidoSalvo) ? pedidoSalvo : [];
     }
   }catch(e){ pedido = []; }
   atualizarBadge();
