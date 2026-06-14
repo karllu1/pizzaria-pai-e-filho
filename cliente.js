@@ -1,5 +1,6 @@
 function carregarPedidoNaTelaCliente() {
   const pedidoJSON = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
+
   if (!pedidoJSON) {
     alert('Nenhum pedido encontrado. Volte ao cardápio.');
     voltarCardapio();
@@ -277,13 +278,21 @@ function finalizarPedidoWhatsApp(event) {
   const encoded = encodeURIComponent(msg);
   const url = `https://wa.me/${numeroWhatsApp}?text=${encoded}`;
 
-  try{
-    window.open(url, '_blank');
-  }catch(e){ console.warn('Não foi possível abrir a nova janela:', e); }
+  localStorage.removeItem('pedido');
+  sessionStorage.removeItem('pedido');
+
+  localStorage.clear();
+  sessionStorage.clear();
 
   try { localStorage.removeItem('pedido'); } catch(e) {}
   try { sessionStorage.removeItem('pedido'); } catch(e) {}
 
+  window.open(url, '_blank');
+
   // Redireciona para a tela principal do cardápio (evita ficar travado no resumo)
   setTimeout(() => { window.location.href = urlComTemaTeste('index.html'); }, 400);
+
+  localStorage.removeItem('pedido');
+  sessionStorage.removeItem('pedido');
+
 }

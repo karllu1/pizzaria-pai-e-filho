@@ -870,8 +870,3 @@ function carregarPedidoDoStorage(){
 
 // Carrega pedido salvo ao abrir a página
 document.addEventListener('DOMContentLoaded', carregarPedidoDoStorage);
-
-// Garante salvar o pedido caso o usuário feche/saia da página
-window.addEventListener('beforeunload', function(){
-  salvarPedidoStorage();
-});
