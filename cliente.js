@@ -116,7 +116,6 @@ function onPagamentoChange(valor){
     if (taxaInfo && taxaTotal > 0) {
       taxaInfo.textContent = 'Taxa adicional para pagamento no cartão: R$ 0,50 por pizza P, R$ 1,00 por pizza G.';
       taxaInfo.style.display = 'block';
-<<<<<<< HEAD
     }
 
     for (const item of pedidoLocal) {
@@ -129,11 +128,6 @@ function onPagamentoChange(valor){
       } else {
         continue;
       }
-=======
-    } else if (taxaInfo) {
-      taxaInfo.style.display = 'none';
-      taxaInfo.textContent = '';
->>>>>>> c933523fefe0b32ae420da4644e1213e4813f31b
     }
   } else {
     if (taxaInfo) {
@@ -233,7 +227,6 @@ function finalizarPedidoWhatsApp(event) {
   // Compute per-pizza fee for card payments
   let taxaTotal = 0;
   if (pagamento === 'Débito' || pagamento === 'Crédito') {
-<<<<<<< HEAD
     for (const item of pedidoLocal) {
       const nomeItem = (item.nome || '').toString();
       const detalheItem = (item.detalhe || '').toString();
@@ -246,9 +239,6 @@ function finalizarPedidoWhatsApp(event) {
         continue;
       }
     }
-=======
-    taxaTotal = calcularTaxaCartao(pedidoLocal);
->>>>>>> c933523fefe0b32ae420da4644e1213e4813f31b
     if (taxaTotal > 0) {
       msg += `\nTaxa por pagamento no cartão: R$ ${taxaTotal.toFixed(2).replace('.',',')}\n`;
     }
