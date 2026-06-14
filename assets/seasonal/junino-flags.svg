@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 150" preserveAspectRatio="xMidYMin meet">
+  <defs>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <path d="M36 24 C238 102 514 120 884 28" fill="none" stroke="#15100c" stroke-width="5" stroke-linecap="round"/>
+  <g filter="url(#softShadow)">
+    <path d="M66 34 L142 58 L124 116 L78 122 L44 76 Z" fill="#d9272f"/>
+    <path d="M156 62 L235 78 L226 132 L192 112 L152 124 Z" fill="#eadb1b"/>
+    <path d="M250 82 L330 92 L318 136 L278 150 L246 116 Z" fill="#1f8d3f"/>
+    <path d="M346 94 L424 98 L420 144 L386 122 L346 144 Z" fill="#3aaed1"/>
+    <path d="M440 98 L520 96 L516 138 L476 154 L440 134 Z" fill="#d9272f"/>
+    <path d="M536 94 L614 84 L616 132 L576 112 L542 144 Z" fill="#eadb1b"/>
+    <path d="M630 80 L710 62 L720 118 L686 136 L636 110 Z" fill="#1f8d3f"/>
+    <path d="M724 58 L800 34 L836 108 L800 102 L766 134 Z" fill="#3aaed1"/>
+  </g>
+  <g stroke="#fff7e8" stroke-width="5" stroke-linecap="round" opacity=".78">
+    <path d="M143 59 L156 62"/>
+    <path d="M236 78 L250 82"/>
+    <path d="M331 92 L346 94"/>
+    <path d="M425 98 L440 98"/>
+    <path d="M521 96 L536 94"/>
+    <path d="M615 84 L630 80"/>
+    <path d="M711 62 L724 58"/>
+  </g>
+</svg>

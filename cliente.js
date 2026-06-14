@@ -6,17 +6,29 @@ function carregarPedidoNaTelaCliente() {
     return;
   }
 
-  const pedidoLocal = JSON.parse(pedidoJSON);
+  let pedidoLocal = [];
+  try {
+    pedidoLocal = JSON.parse(pedidoJSON);
+  } catch (e) {
+    pedidoLocal = [];
+  }
+
+  if (!Array.isArray(pedidoLocal) || pedidoLocal.length === 0) {
+    alert('Nenhum pedido encontrado. Volte ao cardápio.');
+    voltarCardapio();
+    return;
+  }
 
   const lista = document.getElementById('resumoItens');
   lista.innerHTML = '';
   pedidoLocal.forEach(item => {
+    const preco = Number(item.preco) || 0;
     const li = document.createElement('li');
-    li.textContent = `${item.nome} — R$ ${item.preco.toFixed(2).replace('.', ',')}`;
+    li.textContent = `${item.nome} — R$ ${preco.toFixed(2).replace('.', ',')}`;
     lista.appendChild(li);
   });
 
-  const total = pedidoLocal.reduce((s, i) => s + i.preco, 0);
+  const total = pedidoLocal.reduce((s, i) => s + (Number(i.preco) || 0), 0);
   document.getElementById('resumoTotal').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
 }
 
@@ -44,6 +56,37 @@ function selecionarTipoEntrega(tipo, elemento) {
   }
 }
 
+function lerPedidoSalvo() {
+  const pedidoJSON = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
+  if (!pedidoJSON) return [];
+
+  try {
+    const pedido = JSON.parse(pedidoJSON);
+    return Array.isArray(pedido) ? pedido : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function calcularTaxaCartao(pedidoLocal) {
+  return pedidoLocal.reduce((total, item) => {
+    const detalhe = (item.detalhe || '').toString();
+    const nome = (item.nome || '').toString();
+
+    if (item.tipo === 'combo') {
+      const grandes = (detalhe.match(/Pizza G/g) || []).length;
+      const pequenas = (detalhe.match(/Pizza P/g) || []).length;
+      return total + (grandes * 1.00) + (pequenas * 0.50);
+    }
+
+    if (item.tipo === 'pizza') {
+      return total + (nome.includes('(G)') || detalhe.includes('Pizza G') ? 1.00 : 0.50);
+    }
+
+    return total;
+  }, 0);
+}
+
 // Exibe campo de troco quando pagamento é Dinheiro
 function onPagamentoChange(valor){
   const group = document.getElementById('groupTroco');
@@ -63,16 +106,17 @@ function onPagamentoChange(valor){
   }
 
   // Recalculate subtotal from stored pedido (avoid reading resumoTotal which may already contain a fee)
-  const pedidoJSON = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
-  const pedidoLocal = pedidoJSON ? JSON.parse(pedidoJSON) : [];
-  const subtotal = pedidoLocal.reduce((s, i) => s + (i.preco || 0), 0);
+  const pedidoLocal = lerPedidoSalvo();
+  const subtotal = pedidoLocal.reduce((s, i) => s + (Number(i.preco) || 0), 0);
 
   // If card payment, compute per-pizza fee: R$1.00 for G, R$0.50 for others
   let taxaTotal = 0;
   if (valor === 'Débito' || valor === 'Crédito') {
-    if (taxaInfo) {
+    taxaTotal = calcularTaxaCartao(pedidoLocal);
+    if (taxaInfo && taxaTotal > 0) {
       taxaInfo.textContent = 'Taxa adicional para pagamento no cartão: R$ 0,50 por pizza P, R$ 1,00 por pizza G.';
       taxaInfo.style.display = 'block';
+<<<<<<< HEAD
     }
 
     for (const item of pedidoLocal) {
@@ -85,6 +129,11 @@ function onPagamentoChange(valor){
       } else {
         continue;
       }
+=======
+    } else if (taxaInfo) {
+      taxaInfo.style.display = 'none';
+      taxaInfo.textContent = '';
+>>>>>>> c933523fefe0b32ae420da4644e1213e4813f31b
     }
   } else {
     if (taxaInfo) {
@@ -113,21 +162,19 @@ function voltarCardapio() {
 function finalizarPedidoWhatsApp(event) {
   event.preventDefault();
 
-  // Tenta localStorage primeiro (pode ter sido salvo lá), depois sessionStorage
-  const pedidoJSON = localStorage.getItem('pedido') || sessionStorage.getItem('pedido');
-
   if(!estaAberto()){
     showToast('🔒 Estamos fechados! Pedidos das 17h30 às 22h (fecha seg.)');
     setTimeout(() => { window.location.href = urlComTemaTeste('index.html'); }, 4000);
     return;
   }
 
-  if (!pedidoJSON) {
+  const pedidoLocal = lerPedidoSalvo();
+
+  if (!Array.isArray(pedidoLocal) || pedidoLocal.length === 0) {
     alert('Pedido não encontrado.');
     return;
   }
 
-  const pedidoLocal = JSON.parse(pedidoJSON);
   const nome = document.getElementById('nome').value.trim();
   const tipoEntrega = document.getElementById('tipoEntrega').value;
   const endereco = document.getElementById('endereco').value.trim();
@@ -173,18 +220,20 @@ function finalizarPedidoWhatsApp(event) {
 
   msg += '\nSEU PEDIDO\n';
   pedidoLocal.forEach((item) => {
+    const preco = Number(item.preco) || 0;
     if (item.tipo === 'combo' && item.detalhe) {
-      msg += `- ${item.nome}\n   ${item.detalhe} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+      msg += `- ${item.nome}\n   ${item.detalhe} — R$ ${preco.toFixed(2).replace('.', ',')}\n`;
     } else {
-      msg += `- ${item.nome} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+      msg += `- ${item.nome} — R$ ${preco.toFixed(2).replace('.', ',')}\n`;
     }
   });
 
   // Calcula total e aplica taxa para cartão se necessário
-  let subtotal = pedidoLocal.reduce((s, i) => s + i.preco, 0);
+  let subtotal = pedidoLocal.reduce((s, i) => s + (Number(i.preco) || 0), 0);
   // Compute per-pizza fee for card payments
   let taxaTotal = 0;
   if (pagamento === 'Débito' || pagamento === 'Crédito') {
+<<<<<<< HEAD
     for (const item of pedidoLocal) {
       const nomeItem = (item.nome || '').toString();
       const detalheItem = (item.detalhe || '').toString();
@@ -197,6 +246,9 @@ function finalizarPedidoWhatsApp(event) {
         continue;
       }
     }
+=======
+    taxaTotal = calcularTaxaCartao(pedidoLocal);
+>>>>>>> c933523fefe0b32ae420da4644e1213e4813f31b
     if (taxaTotal > 0) {
       msg += `\nTaxa por pagamento no cartão: R$ ${taxaTotal.toFixed(2).replace('.',',')}\n`;
     }

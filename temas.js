@@ -1,5 +1,13 @@
 (function () {
-  const TEMAS_VALIDOS = new Set(['normal', 'sao-joao', 'natal', 'pascoa', 'namorados']);
+  const TEMAS_VALIDOS = new Set([
+    'normal',
+    'sao-joao',
+    'natal',
+    'pascoa',
+    'namorados',
+    'ano-novo',
+    'criancas'
+  ]);
 
   function dataLocalSemHora(data) {
     return new Date(data.getFullYear(), data.getMonth(), data.getDate());
@@ -44,6 +52,8 @@
     const mes = hoje.getMonth() + 1;
     const dia = hoje.getDate();
 
+    if ((mes === 12 && dia === 31) || (mes === 1 && dia === 1)) return 'ano-novo';
+    if (mes === 10 && dia === 12) return 'criancas';
     if (mes === 6 && dia === 12) return 'namorados';
     if (mes === 6) return 'sao-joao';
     if (mes === 12) return 'natal';
@@ -77,22 +87,34 @@
         info: '🔥 Clima de São João'
       },
       natal: {
-        badge: 'Natal Pai e Filho',
-        hero: 'Pizza quentinha para reunir a família no clima de Natal',
+        badge: 'Feliz Natal',
+        hero: 'Natal é tempo de celebrar com quem a gente ama e com uma pizza deliciosa!',
         resumo: 'Complete os dados para finalizar seu pedido de Natal',
         info: '🎄 Especial de Natal'
       },
       pascoa: {
-        badge: 'Páscoa Pai e Filho',
-        hero: 'Doces, chocolate e pizza quentinha para celebrar a Páscoa',
+        badge: 'Feliz Páscoa',
+        hero: 'Páscoa é tempo de renovação, amor e muita pizza boa!',
         resumo: 'Complete os dados para finalizar seu pedido de Páscoa',
         info: '🍫 Semana da Páscoa'
       },
       namorados: {
-        badge: 'Dia dos Namorados',
-        hero: 'Uma pizza especial para dividir com quem você gosta',
+        badge: 'Especial Dia dos Namorados',
+        hero: 'Momentos especiais pedem sabor, amor e uma pizza incrível',
         resumo: 'Complete os dados para finalizar seu pedido especial',
         info: '❤️ Especial dos Namorados'
+      },
+      'ano-novo': {
+        badge: 'Feliz Ano Novo',
+        hero: 'Um novo ciclo começa e a gente deseja sabor, felicidade e muitas conquistas!',
+        resumo: 'Complete os dados para finalizar seu pedido de Ano Novo',
+        info: '✨ Especial de Ano Novo'
+      },
+      criancas: {
+        badge: 'Feliz Dia das Crianças',
+        hero: 'Diversão, alegria e pizza boa combinam muito!',
+        resumo: 'Complete os dados para finalizar seu pedido especial',
+        info: '⭐ Especial das Crianças'
       }
     };
 
@@ -108,6 +130,28 @@
     if (temaInfo) temaInfo.textContent = atual.info;
   }
 
+  function criarDecoracaoSazonal() {
+    let decoracao = document.querySelector('.seasonal-decor');
+    if (!decoracao) {
+      decoracao = document.createElement('div');
+      decoracao.className = 'seasonal-decor';
+      decoracao.setAttribute('aria-hidden', 'true');
+      decoracao.innerHTML = [
+        '<span class="seasonal-particle p1"></span>',
+        '<span class="seasonal-particle p2"></span>',
+        '<span class="seasonal-particle p3"></span>',
+        '<span class="seasonal-particle p4"></span>',
+        '<span class="seasonal-particle p5"></span>',
+        '<span class="seasonal-particle p6"></span>',
+        '<span class="seasonal-icon i1"></span>',
+        '<span class="seasonal-icon i2"></span>',
+        '<span class="seasonal-icon i3"></span>',
+        '<span class="seasonal-icon i4"></span>'
+      ].join('');
+      document.body.prepend(decoracao);
+    }
+  }
+
   const temaAtual = aplicarTema(detectarTema());
   window.PizzariaTema = {
     aplicarTema,
@@ -118,8 +162,12 @@
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', atualizarTextosSazonais);
+    document.addEventListener('DOMContentLoaded', function () {
+      criarDecoracaoSazonal();
+      atualizarTextosSazonais();
+    });
   } else {
+    criarDecoracaoSazonal();
     atualizarTextosSazonais();
   }
 })();

@@ -1,0 +1,514 @@
+/* Camada sazonal premium: visual apenas, sem alterar fluxo, navegacao ou compra. */
+
+html.tema-normal {
+  --seasonal-accent: transparent;
+  --seasonal-glow: transparent;
+  --seasonal-soft: transparent;
+}
+
+html.tema-sao-joao {
+  --vermelho: #9a2f22;
+  --laranja: #b76627;
+  --laranja2: #a9471d;
+  --creme: #f8ecd8;
+  --creme2: #efd8ad;
+  --escuro: #241105;
+  --texto: #3a2110;
+  --cartao: #fff9ed;
+  --seasonal-accent: #c78b34;
+  --seasonal-glow: rgba(210, 126, 32, .24);
+  --seasonal-soft: rgba(238, 206, 150, .2);
+}
+
+html.tema-namorados {
+  --vermelho: #9c2433;
+  --laranja: #b76558;
+  --laranja2: #a72e3f;
+  --creme: #fff1ef;
+  --creme2: #f0cbc8;
+  --escuro: #271015;
+  --texto: #3f1c22;
+  --cartao: #fffafa;
+  --seasonal-accent: #c88b8b;
+  --seasonal-glow: rgba(174, 54, 74, .18);
+  --seasonal-soft: rgba(255, 221, 226, .32);
+}
+
+html.tema-pascoa {
+  --vermelho: #8d4f32;
+  --laranja: #b87345;
+  --laranja2: #9c5b35;
+  --creme: #fff4ea;
+  --creme2: #ead8c8;
+  --escuro: #2d1b12;
+  --texto: #3c281d;
+  --cartao: #fffaf6;
+  --seasonal-accent: #c8a06a;
+  --seasonal-glow: rgba(191, 145, 92, .2);
+  --seasonal-soft: rgba(255, 244, 234, .44);
+}
+
+html.tema-natal {
+  --vermelho: #8f1f1f;
+  --laranja: #b88938;
+  --laranja2: #9f2d25;
+  --creme: #f8f1e7;
+  --creme2: #efe1c8;
+  --escuro: #20120c;
+  --texto: #342015;
+  --cartao: #fffaf2;
+  --seasonal-accent: #c49a48;
+  --seasonal-glow: rgba(196, 154, 72, .22);
+  --seasonal-soft: rgba(53, 91, 58, .12);
+}
+
+html.tema-ano-novo {
+  --vermelho: #9b2d22;
+  --laranja: #c79a43;
+  --laranja2: #a9471d;
+  --creme: #fbf7ef;
+  --creme2: #ead9ac;
+  --escuro: #15100d;
+  --texto: #2d2118;
+  --cartao: #fffdf7;
+  --seasonal-accent: #d8b35d;
+  --seasonal-glow: rgba(216, 179, 93, .26);
+  --seasonal-soft: rgba(12, 10, 9, .08);
+}
+
+html.tema-criancas {
+  --vermelho: #b23b26;
+  --laranja: #c47b2d;
+  --laranja2: #b45124;
+  --creme: #fff7ea;
+  --creme2: #ead9b6;
+  --escuro: #241405;
+  --texto: #3c2514;
+  --cartao: #fffdf8;
+  --seasonal-accent: #d8a437;
+  --seasonal-glow: rgba(216, 164, 55, .18);
+  --seasonal-soft: rgba(126, 160, 122, .14);
+}
+
+/* Mantem as dimensoes e posicoes originais do site. */
+html[class*="tema-"]:not(.tema-normal) .hero {
+  min-height: unset;
+  padding: 52px 24px 44px;
+  border-bottom: 0;
+}
+
+html[class*="tema-"]:not(.tema-normal) .hero-emoji {
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  font-size: 64px;
+  display: block;
+}
+
+html[class*="tema-"]:not(.tema-normal) .combo-grid {
+  gap: 14px;
+  padding: 12px 0 20px;
+}
+
+html[class*="tema-"]:not(.tema-normal) .combo-card {
+  border-radius: 18px;
+}
+
+html[class*="tema-"]:not(.tema-normal) .combo-img-wrapper {
+  height: 160px;
+}
+
+html[class*="tema-"]:not(.tema-normal) .combo-body {
+  background: var(--cartao);
+}
+
+html[class*="tema-"]:not(.tema-normal) .arraia-badge {
+  background: rgba(255, 250, 240, .9);
+  border: 1px solid rgba(60, 32, 16, .16);
+  color: var(--escuro);
+  box-shadow: 0 8px 18px rgba(37, 17, 5, .12);
+  white-space: nowrap;
+}
+
+html.tema-normal .seasonal-decor,
+html.tema-normal .arraia-badge {
+  display: none;
+}
+
+body {
+  isolation: isolate;
+}
+
+.seasonal-decor {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.hero,
+.info-banner,
+.sec-title,
+.categorias,
+#filtros,
+#cardapio,
+footer,
+.cliente-container {
+  position: relative;
+  z-index: 1;
+}
+
+.seasonal-decor::before,
+.seasonal-decor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .9;
+}
+
+.seasonal-decor::before {
+  background:
+    radial-gradient(circle at 18% 20%, var(--seasonal-glow), transparent 28%),
+    radial-gradient(circle at 82% 32%, var(--seasonal-soft), transparent 26%),
+    radial-gradient(circle at 50% 88%, var(--seasonal-glow), transparent 32%);
+}
+
+.seasonal-decor::after {
+  opacity: .2;
+  background:
+    linear-gradient(90deg, rgba(80, 48, 20, .18) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(80, 48, 20, .14) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.seasonal-particle,
+.seasonal-icon {
+  position: absolute;
+  display: block;
+  opacity: .34;
+  transform: translate3d(0,0,0);
+  will-change: transform, opacity;
+}
+
+.seasonal-particle {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--seasonal-accent);
+  box-shadow: 0 0 18px var(--seasonal-glow);
+  animation: seasonal-float 14s ease-in-out infinite;
+}
+
+.p1 { left: 9%; top: 18%; animation-duration: 16s; }
+.p2 { left: 22%; top: 74%; animation-duration: 19s; animation-delay: -4s; }
+.p3 { left: 46%; top: 22%; animation-duration: 17s; animation-delay: -8s; }
+.p4 { left: 67%; top: 70%; animation-duration: 21s; animation-delay: -5s; }
+.p5 { left: 82%; top: 28%; animation-duration: 18s; animation-delay: -9s; }
+.p6 { left: 92%; top: 82%; animation-duration: 23s; animation-delay: -12s; }
+
+@keyframes seasonal-float {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: .18; }
+  35% { transform: translate3d(14px, -22px, 0); opacity: .42; }
+  70% { transform: translate3d(-10px, 18px, 0); opacity: .28; }
+}
+
+.hero {
+  overflow: hidden;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 2;
+}
+
+html.tema-sao-joao .hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  height: 118px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .78;
+  background: url("assets/seasonal/junino-flags.svg") center top / 860px auto no-repeat;
+  animation: seasonal-sway 7s ease-in-out infinite;
+}
+
+html.tema-sao-joao .hero::before {
+  background:
+    url("assets/seasonal/junino-icons.svg") 92% 72% / 150px auto no-repeat,
+    radial-gradient(circle at 18% 72%, rgba(214, 130, 40, .24), transparent 28%),
+    linear-gradient(45deg, rgba(239,214,163,.09) 25%, transparent 25% 50%, rgba(239,214,163,.09) 50% 75%, transparent 75%) 0 0 / 34px 34px;
+}
+
+@keyframes seasonal-sway {
+  0%, 100% { transform: translateY(0) rotate(.15deg); }
+  50% { transform: translateY(2px) rotate(-.15deg); }
+}
+
+html.tema-sao-joao .seasonal-particle {
+  background: #f2c66d;
+  box-shadow: 0 0 16px rgba(242,198,109,.78);
+}
+
+html.tema-namorados .seasonal-particle {
+  width: 12px;
+  height: 12px;
+  background: rgba(190, 74, 92, .34);
+  border-radius: 50% 50% 45% 45%;
+  transform: rotate(45deg);
+  animation-name: romantic-float;
+}
+
+html.tema-namorados .seasonal-particle::before,
+html.tema-namorados .seasonal-particle::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: inherit;
+}
+
+html.tema-namorados .seasonal-particle::before { left: -6px; top: 0; }
+html.tema-namorados .seasonal-particle::after { left: 0; top: -6px; }
+
+@keyframes romantic-float {
+  0%, 100% { transform: translate3d(0,0,0) rotate(45deg); opacity: .16; }
+  50% { transform: translate3d(10px,-28px,0) rotate(45deg); opacity: .34; }
+}
+
+html.tema-namorados .hero::before {
+  background:
+    url("assets/seasonal/namorados-hearts.svg") 90% 68% / 155px auto no-repeat,
+    radial-gradient(circle at 24% 34%, rgba(216, 128, 145, .2), transparent 24%),
+    radial-gradient(circle at 78% 66%, rgba(156,36,51,.22), transparent 28%);
+}
+
+html.tema-pascoa .seasonal-decor::after {
+  opacity: .16;
+  background:
+    radial-gradient(ellipse at center, rgba(141,79,50,.22) 0 24%, transparent 25%) 0 0 / 70px 42px,
+    linear-gradient(0deg, rgba(120,90,60,.08) 1px, transparent 1px) 0 0 / 28px 28px;
+}
+
+html.tema-pascoa .hero::before {
+  background:
+    url("assets/seasonal/pascoa-ornaments.svg") 92% 70% / 160px auto no-repeat,
+    radial-gradient(circle at 18% 30%, rgba(200,160,106,.18), transparent 26%),
+    radial-gradient(circle at 78% 78%, rgba(139,111,142,.16), transparent 24%);
+}
+
+html.tema-natal .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 70px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .76;
+  background: url("assets/seasonal/natal-lights.svg") center top / 100% 70px no-repeat;
+  animation: lights-soft 6s ease-in-out infinite;
+}
+
+@keyframes lights-soft {
+  0%, 100% { opacity: .56; filter: saturate(.9); }
+  50% { opacity: .84; filter: saturate(1.08); }
+}
+
+html.tema-natal .seasonal-particle {
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,.7);
+  box-shadow: none;
+  animation-name: snow-fall;
+}
+
+@keyframes snow-fall {
+  0% { transform: translate3d(0,-20px,0); opacity: 0; }
+  20% { opacity: .42; }
+  100% { transform: translate3d(18px,90px,0); opacity: 0; }
+}
+
+html.tema-natal .hero::before {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(196,154,72,.24), transparent 24%),
+    radial-gradient(circle at 82% 70%, rgba(53,91,58,.18), transparent 28%);
+}
+
+html.tema-ano-novo body {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(216,179,93,.18), transparent 26%),
+    linear-gradient(#191410, #fbf7ef 42%, #fbf7ef);
+}
+
+html.tema-ano-novo .hero {
+  background:
+    linear-gradient(rgba(10,8,7,.64), rgba(10,8,7,.72)),
+    url("logo_pizzaria.jpeg") center 22% / cover no-repeat;
+}
+
+html.tema-ano-novo .hero::before {
+  background:
+    url("assets/seasonal/ano-novo-sparks.svg") 88% 58% / 180px auto no-repeat,
+    radial-gradient(circle at 24% 34%, rgba(216,179,93,.24), transparent 24%),
+    radial-gradient(circle at 70% 74%, rgba(255,255,255,.14), transparent 28%);
+}
+
+html.tema-ano-novo .seasonal-particle {
+  width: 5px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(216,179,93,.68);
+  animation-name: confetti-fall;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translate3d(0,-30px,0) rotate(0deg); opacity: 0; }
+  20% { opacity: .48; }
+  100% { transform: translate3d(-12px,110px,0) rotate(160deg); opacity: 0; }
+}
+
+html.tema-criancas .hero::before {
+  background:
+    url("assets/seasonal/criancas-shapes.svg") 90% 66% / 170px auto no-repeat,
+    radial-gradient(circle at 20% 32%, rgba(216,164,55,.18), transparent 22%),
+    radial-gradient(circle at 80% 76%, rgba(118,155,178,.16), transparent 26%);
+}
+
+html.tema-criancas .seasonal-particle {
+  width: 16px;
+  height: 22px;
+  border-radius: 50% 50% 46% 46%;
+  background: rgba(216,164,55,.42);
+  box-shadow: none;
+  animation-name: balloon-float;
+}
+
+html.tema-criancas .p2,
+html.tema-criancas .p5 { background: rgba(118,155,178,.42); }
+html.tema-criancas .p3,
+html.tema-criancas .p6 { background: rgba(126,160,122,.42); }
+
+@keyframes balloon-float {
+  0%, 100% { transform: translate3d(0,0,0); opacity: .2; }
+  50% { transform: translate3d(8px,-34px,0); opacity: .4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-particle,
+  .seasonal-icon,
+  html.tema-sao-joao .hero::after,
+  html.tema-natal .hero::after {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html.tema-sao-joao .hero::after,
+  html.tema-natal .hero::after {
+    opacity: .66;
+    background-size: 620px auto;
+  }
+
+  html.tema-sao-joao .hero::before,
+  html.tema-pascoa .hero::before,
+  html.tema-ano-novo .hero::before,
+  html.tema-criancas .hero::before {
+    background-position: 112% 80%, center;
+    background-size: 125px auto, auto;
+  }
+
+  .seasonal-particle {
+    opacity: .24;
+  }
+}
+
+/* Fundos ilustrados baseados na referencia visual enviada pelo cliente. */
+html.tema-sao-joao .hero,
+html.tema-namorados .hero,
+html.tema-pascoa .hero,
+html.tema-natal .hero,
+html.tema-ano-novo .hero,
+html.tema-criancas .hero {
+  background-color: #2a0d08;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+html.tema-sao-joao .hero {
+  background-image:
+    linear-gradient(rgba(32,10,5,.08), rgba(32,10,5,.18)),
+    url("assets/seasonal/hero-sao-joao.jpg");
+}
+
+html.tema-namorados .hero {
+  background-image:
+    linear-gradient(rgba(38,5,11,.08), rgba(38,5,11,.16)),
+    url("assets/seasonal/hero-namorados.jpg");
+}
+
+html.tema-pascoa .hero {
+  background-image:
+    linear-gradient(rgba(34,17,8,.06), rgba(34,17,8,.14)),
+    url("assets/seasonal/hero-pascoa.jpg");
+}
+
+html.tema-natal .hero {
+  background-image:
+    linear-gradient(rgba(30,8,6,.06), rgba(30,8,6,.16)),
+    url("assets/seasonal/hero-natal.jpg");
+}
+
+html.tema-ano-novo .hero {
+  background-image:
+    linear-gradient(rgba(8,6,5,.04), rgba(8,6,5,.14)),
+    url("assets/seasonal/hero-ano-novo.jpg");
+}
+
+html.tema-criancas .hero {
+  background-image:
+    linear-gradient(rgba(35,8,4,.06), rgba(35,8,4,.16)),
+    url("assets/seasonal/hero-criancas.jpg");
+}
+
+html.tema-sao-joao .hero::before,
+html.tema-sao-joao .hero::after,
+html.tema-namorados .hero::before,
+html.tema-namorados .hero::after,
+html.tema-pascoa .hero::before,
+html.tema-pascoa .hero::after,
+html.tema-natal .hero::before,
+html.tema-natal .hero::after,
+html.tema-ano-novo .hero::before,
+html.tema-ano-novo .hero::after,
+html.tema-criancas .hero::before,
+html.tema-criancas .hero::after {
+  content: none;
+}
+
+html.tema-sao-joao .seasonal-decor,
+html.tema-namorados .seasonal-decor,
+html.tema-pascoa .seasonal-decor,
+html.tema-natal .seasonal-decor,
+html.tema-ano-novo .seasonal-decor,
+html.tema-criancas .seasonal-decor {
+  opacity: .38;
+}
+
+@media (max-width: 480px) {
+  html.tema-sao-joao .hero { background-position: center 45%; }
+  html.tema-namorados .hero { background-position: center 42%; }
+  html.tema-pascoa .hero { background-position: center 46%; }
+  html.tema-natal .hero { background-position: center 44%; }
+  html.tema-ano-novo .hero { background-position: center 42%; }
+  html.tema-criancas .hero { background-position: center 45%; }
+}
